@@ -1,0 +1,1 @@
+var c=(r,a)=>{let e;switch(!0){case r instanceof Map:e=new Map;for(const[n,o]of r)e.set(a(n),a(o));return e;case r instanceof Set:e=new Set;for(const n of r)e.add(a(n));return e;case r instanceof Array:e=new Array;for(const n of r)e.push(a(n));return e;default:return a(r)}};export{c as default};

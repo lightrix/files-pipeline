@@ -1,0 +1,1 @@
+import p from"critters";import c from"./parse.js";import{fileURLToPath as n}from"url";var h=async(r,t,e=2)=>{const i=await new p({...t.critters,path:n(r)});for(const o in t)if(Object.prototype.hasOwnProperty.call(t,o)){if(!t[o])continue;switch(o){case"critters":{await c(r,"**/*.html",e,"html",t?.exclude,async a=>i.process(a));break}default:break}}};export{h as default};
