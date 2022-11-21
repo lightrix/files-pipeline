@@ -5,9 +5,9 @@
 	"description": "📂 Files pipeline.",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/nikolaxhristov/pipeline.git"
+		"url": "https://github.com/nikolaxhristov/pipeline.git/tree/no-sharp"
 	},
-	"homepage": "https://github.com/nikolaxhristov/pipeline#readme",
+	"homepage": "https://github.com/nikolaxhristov/pipeline/tree/no-sharp#readme",
 	"bugs": {
 		"url": "https://github.com/nikolaxhristov/pipeline/issues"
 	},
@@ -19,7 +19,6 @@
 		"compression",
 		"css",
 		"html",
-		"img",
 		"critters",
 		"javascript",
 		"performance",
@@ -34,7 +33,6 @@
 		"deepmerge-ts": "4.2.2",
 		"fast-glob": "3.2.12",
 		"html-minifier-terser": "7.0.0",
-		"sharp": "0.31.2",
 		"svgo": "3.0.2",
 		"terser": "5.15.1"
 	},
@@ -42,8 +40,7 @@
 		"@lightrix/config": "0.0.6",
 		"@lightrix/scripts": "0.0.17",
 		"@types/csso": "5.0.0",
-		"@types/html-minifier-terser": "7.0.0",
-		"@types/sharp": "0.31.0"
+		"@types/html-minifier-terser": "7.0.0"
 	},
 	"publishConfig": {
 		"access": "public"

@@ -1,12 +1,10 @@
 import { minify as csso } from "csso";
 import { minify as htmlMinifierTerser } from "html-minifier-terser";
-import sharp from "sharp";
 import { optimize as svgo } from "svgo";
 import { minify as terser } from "terser";
 
 import type { path as optionPath, Options } from "./../../options/index.js";
 import parse from "./parse.js";
-import sharpRead from "./../vendor/sharp-read.js";
 
 export default async (
 	path: optionPath,
@@ -56,21 +54,6 @@ export default async (
 						files,
 						settings?.exclude,
 						async (data) => (await terser(data, setting)).code
-					);
-
-					break;
-				}
-
-				case "img": {
-					await parse(
-						path,
-						"**/*.{avci,avcs,avif,avifs,gif,heic,heics,heif,heifs,jfif,jif,jpe,jpeg,jpg,png,raw,tiff,webp}",
-						debug,
-						files,
-						settings?.exclude,
-						async (sharpFile) =>
-							await sharpRead(sharpFile, setting),
-						async (file) => sharp(file)
 					);
 
 					break;

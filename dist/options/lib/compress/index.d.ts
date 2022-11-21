@@ -1,6 +1,5 @@
 import type CSS from "./css.js";
 import type HTML from "./html.js";
-import type IMG from "./img.js";
 import type JS from "./js.js";
 import type SVG from "./svg.js";
 export interface Options {
@@ -8,7 +7,6 @@ export interface Options {
     css?: boolean | CSS;
     html?: boolean | HTML;
     js?: boolean | JS;
-    img?: boolean | IMG;
     svg?: boolean | SVG;
 }
 declare const _default: {
@@ -52,33 +50,6 @@ declare const _default: {
         module: false;
         safari10: false;
         toplevel: false;
-    };
-    img: {
-        avif: {
-            chromaSubsampling: string;
-            effort: number;
-        };
-        gif: {
-            effort: number;
-        };
-        jpeg: {
-            chromaSubsampling: string;
-            mozjpeg: true;
-            trellisQuantisation: true;
-            overshootDeringing: true;
-            optimiseScans: true;
-        };
-        png: {
-            compressionLevel: number;
-            palette: true;
-        };
-        raw: {};
-        tiff: {
-            compression: string;
-        };
-        webp: {
-            effort: number;
-        };
     };
     svg: {
         multipass: true;
