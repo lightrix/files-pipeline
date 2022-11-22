@@ -15,8 +15,8 @@ export default (test: any, fn: any) => {
 		case test instanceof Set:
 			tests = new Set();
 
-			for (const index of test) {
-				tests.add(fn(index));
+			for (const el of test) {
+				tests.add(fn(el));
 			}
 
 			return tests;

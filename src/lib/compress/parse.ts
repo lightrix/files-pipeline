@@ -25,8 +25,8 @@ export default async (
 
 	for (const file of (await new files().in(path).by(glob)).not(exclude)
 		.results) {
-		const inputPath = file[0];
-		const outputPath = file[1];
+		const inputPath = file[1];
+		const outputPath = file[0];
 
 		try {
 			const fileSizeBefore = (await fs.promises.stat(inputPath)).size;

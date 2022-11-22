@@ -11,8 +11,8 @@ export default async (
 	debug: number = 2
 ) => {
 	const critters = await new Critters({
-		...settings.critters,
-		path: fileURLToPath(path),
+		...settings["critters"],
+		path: path instanceof URL ? fileURLToPath(path) : path,
 	});
 
 	for (const files in settings) {
