@@ -68,7 +68,7 @@ export default async (
 				}
 			}
 		} catch (_error) {
-			console.log(`Error: Cannot compress file ${inputPath}!`);
+			console.log(`Error: Cannot compress file ${inputPath} !`);
 		}
 	}
 

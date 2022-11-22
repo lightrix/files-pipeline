@@ -49,7 +49,7 @@ export default async (
 
 			inlines.files++;
 		} catch (_error) {
-			console.log(`Error: Cannot inline file ${inputPath}!`);
+			console.log(`Error: Cannot inline file ${inputPath} !`);
 		}
 	}
 
