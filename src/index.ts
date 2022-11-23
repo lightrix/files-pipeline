@@ -46,6 +46,7 @@ export default class pipeline {
 	constructor(options: Options = {}) {
 		this.options = options;
 		this.mergeDefaultOptions(defaultOptions);
+		return this;
 	}
 
 	async compress() {
@@ -54,6 +55,8 @@ export default class pipeline {
 		for (const path of this.paths) {
 			await compressPipeAll(path, this.options, this.options.logger);
 		}
+
+		return this;
 	}
 
 	async critters() {
@@ -62,5 +65,7 @@ export default class pipeline {
 		for (const path of this.paths) {
 			await crittersPipeAll(path, this.options, this.options.logger);
 		}
+
+		return this;
 	}
 }

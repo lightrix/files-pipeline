@@ -1,6 +1,6 @@
 {
 	"name": "@nikolarhristov/pipeline",
-	"version": "0.0.2",
+	"version": "0.0.3",
 	"type": "module",
 	"description": "📂 Files pipeline.",
 	"repository": {

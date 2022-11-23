@@ -1,3 +1,7 @@
+## 0.0.3
+
+-   Allow chaining of pipelines
+
 ## 0.0.2
 
 -   Bug fix

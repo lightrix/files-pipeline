@@ -4,6 +4,6 @@ export default class pipeline {
     paths: Set<optionPath>;
     private mergeDefaultOptions;
     constructor(options?: Options);
-    compress(): Promise<void>;
-    critters(): Promise<void>;
+    compress(): Promise<this>;
+    critters(): Promise<this>;
 }
