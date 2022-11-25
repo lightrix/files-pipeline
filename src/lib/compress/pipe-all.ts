@@ -70,7 +70,10 @@ export default async (
 						settings?.exclude,
 						async (sharpFile) =>
 							await sharpRead(sharpFile, setting),
-						async (file) => sharp(file)
+						async (file) =>
+							sharp(file, {
+								failOn: "none",
+							})
 					);
 
 					break;
