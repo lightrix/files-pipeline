@@ -156,6 +156,7 @@ new pipeline({
 ```
 
 [@nikolarhristov/pipeline]: https://npmjs.org/@nikolarhristov/pipeline
+[svgo]: https://npmjs.org/svgo
 
 ## Changelog
 
