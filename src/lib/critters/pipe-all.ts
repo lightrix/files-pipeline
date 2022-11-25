@@ -1,8 +1,6 @@
 // @ts-ignore
 import Critters from "critters";
 
-import { dirname } from "path";
-
 import type { path as optionPath, Options } from "./../../options/index.js";
 import parse from "./parse.js";
 import { fileURLToPath } from "url";
@@ -13,6 +11,15 @@ export default async (
 	settings: Options,
 	debug: number = 2
 ) => {
+	const _path = applyTo(path, (url: URL | string) =>
+		url instanceof URL ? fileURLToPath(url) : url
+	);
+
+	const critters = await new Critters({
+		...settings["critters"],
+		path: _path instanceof Map ? _path.keys().next().value : _path,
+	});
+
 	for (const files in settings) {
 		if (Object.prototype.hasOwnProperty.call(settings, files)) {
 			const setting = settings[files];
@@ -29,13 +36,7 @@ export default async (
 						debug,
 						"html",
 						settings?.exclude,
-						async (data, file) =>
-							(
-								await new Critters({
-									...setting,
-									path: dirname(file),
-								})
-							).process(data)
+						async (data) => critters.process(data)
 					);
 
 					break;
