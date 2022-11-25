@@ -1,4 +1,4 @@
-# [@nikolaxhristov/pipeline] 🧪
+# [@nikolarhristov/pipeline] 🧪
 
 ## Installation
 
