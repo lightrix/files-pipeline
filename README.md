@@ -31,11 +31,11 @@ that directory.
 ```ts
 import pipeline from "@nikolarhristov/pipeline";
 
-new pipeline({
-	path: "./input/",
-})
-	.compress()
-	.critters();
+(
+	await new pipeline({
+		path: "./input/",
+	}).compress()
+).critters();
 ```
 
 The following image file types will also be compressed:
