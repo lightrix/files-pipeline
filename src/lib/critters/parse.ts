@@ -12,7 +12,7 @@ export default async (
 	type: string = "",
 	exclude: Options["exclude"],
 	// rome-ignore lint:
-	write: (data: string) => any = async (data) => data,
+	write: (data: string, file: string) => any = async (data) => data,
 	// rome-ignore lint:
 	read: (file: string) => any = async (file) =>
 		await fs.promises.readFile(file, "utf-8")
