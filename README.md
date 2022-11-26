@@ -31,7 +31,7 @@ that directory.
 ```ts
 import pipeline from "@nikolarhristov/pipeline";
 
-(
+await (
 	await new pipeline({
 		path: "./input/",
 	}).compress()
