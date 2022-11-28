@@ -125,18 +125,6 @@ new pipeline({
 });
 ```
 
-Set `logger` to `0` if you do not want to see debug messages. Default is `2`.
-
-**`index.ts`**
-
-```ts
-import pipeline from "@nikolarhristov/pipeline";
-
-new pipeline({
-	logger: 0,
-});
-```
-
 You can provide a filter to exclude files from your pipeline. A filter can be an
 array of regexes or a single match. You can use functions, as well to match on
 file names.
@@ -152,6 +140,18 @@ new pipeline({
 		(file: string) =>
 			file === "./input/this-file-will-not-be-processed.txt",
 	],
+});
+```
+
+Set `logger` to `0` if you do not want to see debug messages. Default is `2`.
+
+**`index.ts`**
+
+```ts
+import pipeline from "@nikolarhristov/pipeline";
+
+new pipeline({
+	logger: 0,
 });
 ```
 

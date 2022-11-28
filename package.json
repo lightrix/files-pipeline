@@ -1,6 +1,6 @@
 {
 	"name": "@nikolarhristov/pipeline",
-	"version": "0.0.6",
+	"version": "0.0.7",
 	"type": "module",
 	"description": "🧪 Pipeline for files.",
 	"repository": {
@@ -26,7 +26,7 @@
 		"svg"
 	],
 	"scripts": {
-		"build": "lightrix build src/index.ts src/lib/**/*.ts src/options/**/index.ts"
+		"build": "lightrix build src/index.ts src/lib/**/*.ts src/options/**/index.ts src/options/lib/callbacks.ts"
 	},
 	"dependencies": {
 		"critters": "0.0.16",

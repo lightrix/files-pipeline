@@ -2,9 +2,24 @@
 import Critters from "critters";
 
 import type { path as optionPath, Options } from "./../../options/index.js";
-import parse from "./parse.js";
+import type { callbacks as callbacksOption } from "../../options/lib/callbacks.js";
+
+import defaultCallbacks from "./../../options/lib/callbacks.js";
+import parse from "./../parse.js";
 import { fileURLToPath } from "url";
-import applyTo from "../apply-to.js";
+import applyTo from "./../apply-to.js";
+import { deepmerge } from "deepmerge-ts";
+
+const callbacks: callbacksOption = deepmerge(defaultCallbacks, {
+	error: async (inputPath: string) =>
+		`Error: Cannot inline file ${inputPath} !`,
+	end: async (pipe: { files: number; type: string; total: number }) =>
+		`\u001b[32mSuccessfully inlined a total of ${
+			pipe.files
+		} ${pipe.type.toUpperCase()} ${
+			pipe.files === 1 ? "file" : "files"
+		}.\u001b[39m`,
+});
 
 export default async (
 	path: optionPath,
@@ -36,7 +51,10 @@ export default async (
 						debug,
 						"html",
 						settings?.exclude,
-						async (data) => critters.process(data)
+						() => ({
+							...callbacks,
+							write: (data) => critters.process(data),
+						})
 					);
 
 					break;
