@@ -1,9 +1,8 @@
-// rome-ignore lint:
 export default (test: any, fn: any) => {
 	let tests;
 
 	switch (true) {
-		case test instanceof Map:
+		case test instanceof Map: {
 			tests = new Map();
 
 			for (const [key, value] of test) {
@@ -11,17 +10,19 @@ export default (test: any, fn: any) => {
 			}
 
 			return tests;
+		}
 
-		case test instanceof Set:
+		case test instanceof Set: {
 			tests = new Set();
 
-			for (const index of test) {
-				tests.add(fn(index));
+			for (const el of test) {
+				tests.add(fn(el));
 			}
 
 			return tests;
+		}
 
-		case test instanceof Array:
+		case test instanceof Array: {
 			tests = new Array();
 
 			for (const index of test) {
@@ -29,6 +30,7 @@ export default (test: any, fn: any) => {
 			}
 
 			return tests;
+		}
 
 		default:
 			return fn(test);

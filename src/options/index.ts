@@ -9,7 +9,7 @@ export interface Options {
 
 	exclude?: exclude | exclude[] | Set<exclude>;
 
-	logger?: number;
+	logger?: 0 | 1 | 2;
 }
 
 export default {

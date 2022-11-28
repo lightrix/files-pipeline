@@ -9,15 +9,15 @@ export default class {
 
 	in(path: optionPath) {
 		const _path = applyTo(
-			applyTo(path, (url) =>
+			applyTo(path, (url: URL | string) =>
 				url instanceof URL ? fileURLToPath(url) : url
 			),
-			(path) => (path.endsWith("/") ? path : `${path}/`)
+			(path: string) => (path.endsWith("/") ? path : `${path}/`)
 		);
 
 		if (_path instanceof Map) {
 			for (const [input, output] of _path) {
-				this.paths.set(output, input);
+				this.paths.set(input, output);
 			}
 		} else {
 			this.paths.set(_path, _path);
@@ -32,7 +32,7 @@ export default class {
 				cwd: input,
 				onlyFiles: true,
 			})) {
-				this.results.set(`${input}${file}`, `${output}${file}`);
+				this.results.set(`${output}${file}`, `${input}${file}`);
 			}
 		}
 

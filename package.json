@@ -1,8 +1,8 @@
 {
 	"name": "@nikolarhristov/pipeline",
-	"version": "0.0.1",
+	"version": "0.0.7",
 	"type": "module",
-	"description": "📂 Files pipeline.",
+	"description": "🧪 Pipeline for files.",
 	"repository": {
 		"type": "git",
 		"url": "https://github.com/nikolaxhristov/pipeline.git/tree/no-sharp"
@@ -25,20 +25,20 @@
 		"svg"
 	],
 	"scripts": {
-		"build": "lightrix build src/index.ts src/lib/**/*.ts src/options/**/index.ts"
+		"build": "lightrix build src/index.ts src/lib/**/*.ts src/options/**/index.ts src/options/lib/callbacks.ts"
 	},
 	"dependencies": {
 		"critters": "0.0.16",
 		"csso": "5.0.5",
 		"deepmerge-ts": "4.2.2",
 		"fast-glob": "3.2.12",
-		"html-minifier-terser": "7.0.0",
+		"html-minifier-terser": "7.1.0",
 		"svgo": "3.0.2",
-		"terser": "5.15.1"
+		"terser": "5.16.0"
 	},
 	"devDependencies": {
 		"@lightrix/config": "0.0.6",
-		"@lightrix/scripts": "0.0.17",
+		"@lightrix/scripts": "0.0.19",
 		"@types/csso": "5.0.0",
 		"@types/html-minifier-terser": "7.0.0"
 	},

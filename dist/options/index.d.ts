@@ -5,10 +5,10 @@ export interface Options {
     [key: string]: any;
     path?: path | path[] | Set<path>;
     exclude?: exclude | exclude[] | Set<exclude>;
-    logger?: number;
+    logger?: 0 | 1 | 2;
 }
 declare const _default: {
     path: string;
-    logger: number;
+    logger: 2;
 };
 export default _default;

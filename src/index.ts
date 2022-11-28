@@ -3,11 +3,11 @@ import { deepmerge } from "deepmerge-ts";
 import defaultOptions from "./options/index.js";
 import type { Options, path as optionPath } from "./options/index.js";
 
-import compressPipeAll from "./lib/compress/pipe-all.js";
+import compress from "./lib/compress/index.js";
 import defaultCompressOptions from "./options/lib/compress/index.js";
 import type { Options as CompressOptions } from "./options/lib/compress/index.js";
 
-import crittersPipeAll from "./lib/critters/pipe-all.js";
+import critters from "./lib/critters/index.js";
 import defaultCrittersOptions from "./options/lib/critters/index.js";
 import type { Options as CrittersOptions } from "./options/lib/critters/index.js";
 
@@ -46,21 +46,26 @@ export default class pipeline {
 	constructor(options: Options = {}) {
 		this.options = options;
 		this.mergeDefaultOptions(defaultOptions);
+		return this;
 	}
 
 	async compress() {
 		this.mergeDefaultOptions(defaultCompressOptions);
 
 		for (const path of this.paths) {
-			await compressPipeAll(path, this.options, this.options.logger);
+			await compress(path, this.options, this.options.logger);
 		}
+
+		return this;
 	}
 
 	async critters() {
 		this.mergeDefaultOptions(defaultCrittersOptions);
 
 		for (const path of this.paths) {
-			await crittersPipeAll(path, this.options, this.options.logger);
+			await critters(path, this.options, this.options.logger);
 		}
+
+		return this;
 	}
 }
