@@ -1,10 +1,14 @@
 import * as fs from "fs";
 import { dirname } from "path";
 
-import type { path as optionPath, Options } from "./../options/index.js";
-import type { callbacks as callbacksFunction } from "./../options/lib/callbacks.js";
+import type { optionPath, Options } from "../options/index.js";
+import type {
+	functionCallbacks,
+	optionCallbacksFile,
+	optionCallbacksPipe,
+} from "../options/lib/callbacks.js";
 
-import defaultCallbacks from "./../options/lib/callbacks.js";
+import defaultCallbacks from "../options/lib/callbacks.js";
 import files from "./files.js";
 
 export default async (
@@ -13,13 +17,19 @@ export default async (
 	debug: number = 2,
 	type: string = "",
 	exclude: Options["exclude"],
-	callbacks: () => callbacksFunction = () => defaultCallbacks
+	callbacks: () => functionCallbacks = () => defaultCallbacks
 ) => {
 	let pipe = {
 		files: 0,
 		type: type,
 		info: {},
-	};
+		current: {
+			inputPath: "",
+			outputPath: "",
+			fileSizeAfter: 0,
+			fileSizeBefore: 0,
+		},
+	} satisfies optionCallbacksPipe;
 
 	for (const file of (await new files().in(path).by(glob)).not(exclude)
 		.results) {
@@ -29,7 +39,7 @@ export default async (
 		try {
 			const fileSizeBefore = (await fs.promises.stat(inputPath)).size;
 
-			const writeBuffer = await callbacks().write(
+			const writeBuffer = await callbacks().wrote(
 				await callbacks().read(inputPath)
 			);
 
@@ -37,47 +47,72 @@ export default async (
 				continue;
 			}
 
-			if (await callbacks().check(fileSizeBefore, writeBuffer)) {
-				try {
-					await fs.promises.access(
-						dirname(outputPath),
-						fs.constants.W_OK
+			if (
+				typeof callbacks().passed === "function" ||
+				!callbacks().passed
+			) {
+				// @ts-expect-error
+				if (await callbacks().passed(fileSizeBefore, writeBuffer)) {
+					try {
+						await fs.promises.access(
+							dirname(outputPath),
+							fs.constants.W_OK
+						);
+					} catch (_error) {
+						await fs.promises.mkdir(dirname(outputPath), {
+							recursive: true,
+						});
+					}
+
+					await fs.promises.writeFile(
+						outputPath,
+						writeBuffer,
+						"utf-8"
 					);
-				} catch (_error) {
-					await fs.promises.mkdir(dirname(outputPath), {
-						recursive: true,
-					});
-				}
 
-				await fs.promises.writeFile(outputPath, writeBuffer, "utf-8");
+					const fileSizeAfter = (await fs.promises.stat(outputPath))
+						.size;
 
-				const fileSizeAfter = (await fs.promises.stat(outputPath)).size;
-
-				pipe.files++;
-				pipe.info = callbacks().pipe(
-					inputPath,
-					outputPath,
-					fileSizeBefore,
-					fileSizeAfter
-				);
-
-				if (debug > 1) {
-					console.info(
-						await callbacks().success(
+					if (debug > 0) {
+						pipe.current = {
 							inputPath,
 							outputPath,
 							fileSizeBefore,
-							fileSizeAfter
-						)
-					);
+							fileSizeAfter,
+						} satisfies optionCallbacksFile;
+
+						pipe.files++;
+
+						pipe = await callbacks().changed(pipe);
+					}
+
+					if (debug > 1) {
+						if (typeof callbacks().accomplished === "function") {
+							console.info(
+								// @ts-expect-error
+								await callbacks().accomplished(
+									inputPath,
+									outputPath,
+									fileSizeBefore,
+									fileSizeAfter
+								)
+							);
+						}
+					}
 				}
 			}
 		} catch (_error) {
-			console.log(callbacks().error(inputPath));
+			if (typeof callbacks().failed === "function") {
+				// @ts-expect-error
+				console.log(callbacks().failed(inputPath));
+			}
 		}
 	}
 
 	if (debug > 0) {
-		console.info(await callbacks().end(pipe));
+		if (typeof callbacks().fulfilled === "function") {
+			// @ts-expect-error
+			console.info(await callbacks().fulfilled(pipe));
+		}
 	}
 };

@@ -1,25 +1,33 @@
 /// <reference types="node" resolution-mode="require"/>
 import * as fs from "fs";
-export type callbacks = {
-    write: (data: string) => Promise<any>;
+export interface optionCallbacksPipe {
+    files: number;
+    type: string;
+    info: any;
+    current: optionCallbacksFile;
+}
+export interface optionCallbacksFile {
+    inputPath: string;
+    outputPath: string;
+    fileSizeAfter: number;
+    fileSizeBefore: number;
+}
+export interface functionCallbacks {
+    fulfilled: boolean | ((pipe: optionCallbacksPipe) => Promise<string>);
+    failed: boolean | ((inputPath: optionCallbacksFile["inputPath"]) => Promise<string>);
+    accomplished: boolean | ((inputPath: optionCallbacksFile["inputPath"], outputPath: optionCallbacksFile["outputPath"], fileSizeBefore: optionCallbacksFile["fileSizeBefore"], fileSizeAfter: optionCallbacksFile["fileSizeAfter"]) => Promise<string>);
+    changed: (pipe: optionCallbacksPipe) => Promise<optionCallbacksPipe>;
+    passed: boolean | ((fileSizeBefore: optionCallbacksFile["fileSizeBefore"], writeBuffer: string | NodeJS.ArrayBufferView | ArrayBuffer | SharedArrayBuffer) => Promise<boolean>);
     read: (file: string) => Promise<any>;
-    error: (inputPath: string) => Promise<string>;
-    check: (fileSizeBefore: number, writeBuffer: string | NodeJS.ArrayBufferView | ArrayBuffer | SharedArrayBuffer) => Promise<boolean>;
-    success: (inputPath: string, outputPath: string, fileSizeBefore: number, fileSizeAfter: number) => Promise<string>;
-    end: (pipe: any) => Promise<string>;
-    pipe: (inputPath: string, outputPath: string, fileSizeBefore: number, fileSizeAfter: number) => Promise<void>;
-};
+    wrote: (data: string) => Promise<any>;
+}
 declare const _default: {
-    write: (data: string) => Promise<string>;
+    wrote: (data: string) => Promise<string>;
     read: (file: fs.PathLike | fs.promises.FileHandle) => Promise<string>;
-    check: () => Promise<true>;
-    error: (inputPath: string) => Promise<string>;
-    success: (inputPath: string, outputPath: string, _fileSizeBefore: number, _fileSizeAfter: number) => Promise<string>;
-    end: (pipe: {
-        files: number;
-        type: string;
-        total: number;
-    }) => Promise<string>;
-    pipe: (_inputPath: string, _outputPath: string, _fileSizeBefore: number, _fileSizeAfter: number) => Promise<void>;
+    passed: () => Promise<true>;
+    failed: (inputPath: optionCallbacksFile["inputPath"]) => Promise<string>;
+    accomplished: (inputPath: optionCallbacksFile["inputPath"], outputPath: optionCallbacksFile["outputPath"], _fileSizeBefore: optionCallbacksFile["fileSizeBefore"], _fileSizeAfter: optionCallbacksFile["fileSizeAfter"]) => Promise<string>;
+    fulfilled: (pipe: optionCallbacksPipe) => Promise<string>;
+    changed: (pipe: optionCallbacksPipe) => Promise<optionCallbacksPipe>;
 };
 export default _default;

@@ -1,61 +1,68 @@
 import * as fs from "fs";
 
-import formatBytes from "./../../lib/format-bytes.js";
-
-export type callbacks = {
+export interface optionCallbacksPipe {
+	files: number;
+	type: string;
 	// rome-ignore lint:
-	write: (data: string) => Promise<any>;
+	info: any;
+	current: optionCallbacksFile;
+}
+
+export interface optionCallbacksFile {
+	inputPath: string;
+	outputPath: string;
+	fileSizeAfter: number;
+	fileSizeBefore: number;
+}
+
+export interface functionCallbacks {
+	fulfilled: boolean | ((pipe: optionCallbacksPipe) => Promise<string>);
+	failed:
+		| boolean
+		| ((inputPath: optionCallbacksFile["inputPath"]) => Promise<string>);
+	accomplished:
+		| boolean
+		| ((
+				inputPath: optionCallbacksFile["inputPath"],
+				outputPath: optionCallbacksFile["outputPath"],
+				fileSizeBefore: optionCallbacksFile["fileSizeBefore"],
+				fileSizeAfter: optionCallbacksFile["fileSizeAfter"]
+		  ) => Promise<string>);
+	changed: (pipe: optionCallbacksPipe) => Promise<optionCallbacksPipe>;
+	passed:
+		| boolean
+		| ((
+				fileSizeBefore: optionCallbacksFile["fileSizeBefore"],
+				writeBuffer:
+					| string
+					| NodeJS.ArrayBufferView
+					| ArrayBuffer
+					| SharedArrayBuffer
+		  ) => Promise<boolean>);
 	// rome-ignore lint:
 	read: (file: string) => Promise<any>;
-	error: (inputPath: string) => Promise<string>;
-	check: (
-		fileSizeBefore: number,
-		writeBuffer:
-			| string
-			| NodeJS.ArrayBufferView
-			| ArrayBuffer
-			| SharedArrayBuffer
-	) => Promise<boolean>;
-	success: (
-		inputPath: string,
-		outputPath: string,
-		fileSizeBefore: number,
-		fileSizeAfter: number
-	) => Promise<string>;
 	// rome-ignore lint:
-	end: (pipe: any) => Promise<string>;
-	// rome-ignore lint:
-	pipe: (
-		inputPath: string,
-		outputPath: string,
-		fileSizeBefore: number,
-		fileSizeAfter: number
-	) => Promise<void>;
-};
+	wrote: (data: string) => Promise<any>;
+}
 
 export default {
-	write: async (data: string) => data,
+	wrote: async (data: string) => data,
 	read: async (file: fs.PathLike | fs.promises.FileHandle) =>
 		await fs.promises.readFile(file, "utf-8"),
-	check: async () => true,
-	error: async (inputPath: string) =>
+	passed: async () => true,
+	failed: async (inputPath: optionCallbacksFile["inputPath"]) =>
 		`Error: Cannot process file ${inputPath} !`,
-	success: async (
-		inputPath: string,
-		outputPath: string,
-		_fileSizeBefore: number,
-		_fileSizeAfter: number
+	accomplished: async (
+		inputPath: optionCallbacksFile["inputPath"],
+		outputPath: optionCallbacksFile["outputPath"],
+		_fileSizeBefore: optionCallbacksFile["fileSizeBefore"],
+		_fileSizeAfter: optionCallbacksFile["fileSizeAfter"]
 	) => `\u001b[32mProcessed ${inputPath} in ${outputPath} .\u001b[39m`,
-	end: async (pipe: { files: number; type: string; total: number }) =>
+	fulfilled: async (pipe: optionCallbacksPipe) =>
 		`\u001b[32mSuccessfully processed a total of ${
 			pipe.files
 		} ${pipe.type.toUpperCase()} ${
 			pipe.files === 1 ? "file" : "files"
-		} for ${await formatBytes(pipe.total)}.\u001b[39m`,
-	pipe: async (
-		_inputPath: string,
-		_outputPath: string,
-		_fileSizeBefore: number,
-		_fileSizeAfter: number
-	) => {},
-} satisfies callbacks;
+		}.\u001b[39m`,
+	changed: async (pipe) => pipe,
+} satisfies functionCallbacks;

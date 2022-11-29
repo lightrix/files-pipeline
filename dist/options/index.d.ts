@@ -1,10 +1,10 @@
 /// <reference types="node" resolution-mode="require"/>
-export type path = string | URL | Map<string | URL, string | URL>;
-export type exclude = string | RegExp | ((file: string) => boolean);
+export type optionPath = string | URL | Map<string | URL, string | URL>;
+export type optionExclude = string | RegExp | ((file: string) => boolean);
 export interface Options {
     [key: string]: any;
-    path?: path | path[] | Set<path>;
-    exclude?: exclude | exclude[] | Set<exclude>;
+    path?: optionPath | optionPath[] | Set<optionPath>;
+    exclude?: optionExclude | optionExclude[] | Set<optionExclude>;
     logger?: 0 | 1 | 2;
 }
 declare const _default: {

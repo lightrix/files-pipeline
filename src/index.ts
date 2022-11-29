@@ -1,7 +1,7 @@
 import { deepmerge } from "deepmerge-ts";
 
 import defaultOptions from "./options/index.js";
-import type { Options, path as optionPath } from "./options/index.js";
+import type { Options, optionPath } from "./options/index.js";
 
 import compress from "./lib/compress/index.js";
 import defaultCompressOptions from "./options/lib/compress/index.js";

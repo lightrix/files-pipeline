@@ -1,39 +1,57 @@
 // @ts-ignore
 import Critters from "critters";
 
-import type { path as optionPath, Options } from "./../../options/index.js";
-import type { callbacks as callbacksOption } from "../../options/lib/callbacks.js";
+import type { optionPath, Options } from "../../options/index.js";
+import type {
+	functionCallbacks,
+	optionCallbacksPipe,
+} from "../../options/lib/callbacks.js";
+import type { Options as CrittersOptions } from "../../options/lib/critters/index.js";
 
-import defaultCallbacks from "./../../options/lib/callbacks.js";
-import parse from "./../parse.js";
+import defaultCallbacks from "../../options/lib/callbacks.js";
+import parse from "../parse.js";
 import { fileURLToPath } from "url";
-import applyTo from "./../apply-to.js";
+import applyTo from "../apply-to.js";
 import { deepmerge } from "deepmerge-ts";
 
-const callbacks: callbacksOption = deepmerge(defaultCallbacks, {
-	error: async (inputPath: string) =>
+const callbacks = deepmerge(defaultCallbacks, {
+	failed: async (inputPath: string) =>
 		`Error: Cannot inline file ${inputPath} !`,
-	end: async (pipe: { files: number; type: string; total: number }) =>
+	fulfilled: async (pipe: optionCallbacksPipe) =>
 		`\u001b[32mSuccessfully inlined a total of ${
 			pipe.files
 		} ${pipe.type.toUpperCase()} ${
 			pipe.files === 1 ? "file" : "files"
 		}.\u001b[39m`,
-});
+	accomplished: false,
+}) satisfies functionCallbacks;
 
 export default async (
 	path: optionPath,
-	settings: Options,
+	settings: Options & CrittersOptions,
 	debug: number = 2
 ) => {
 	const _path = applyTo(path, (url: URL | string) =>
 		url instanceof URL ? fileURLToPath(url) : url
 	);
 
-	const critters = await new Critters({
-		...settings["critters"],
-		path: _path instanceof Map ? _path.keys().next().value : _path,
-	});
+	const critters = new Critters(
+		deepmerge(settings["critters"], {
+			path: _path instanceof Map ? _path.keys().next().value : _path,
+			logLevel: (() => {
+				switch (debug) {
+					case 0:
+						return "silent";
+					case 1:
+						return "silent";
+					case 2:
+						return "info";
+					default:
+						return "info";
+				}
+			})(),
+		} satisfies CrittersOptions["critters"])
+	);
 
 	for (const files in settings) {
 		if (Object.prototype.hasOwnProperty.call(settings, files)) {
@@ -53,7 +71,7 @@ export default async (
 						settings?.exclude,
 						() => ({
 							...callbacks,
-							write: (data) => critters.process(data),
+							wrote: (data) => critters.process(data),
 						})
 					);
 

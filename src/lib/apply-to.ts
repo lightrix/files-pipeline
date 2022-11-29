@@ -1,3 +1,4 @@
+// rome-ignore lint:
 export default (test: any, fn: any) => {
 	let tests;
 

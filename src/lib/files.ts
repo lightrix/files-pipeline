@@ -1,6 +1,6 @@
 import FastGlob from "fast-glob";
 import { fileURLToPath } from "url";
-import type { Options, path as optionPath } from "../options/index.js";
+import type { Options, optionPath } from "../options/index.js";
 import applyTo from "./apply-to.js";
 
 export default class {

@@ -1,1 +1,1 @@
-var e={path:"./dist/",logger:2};export{e as default};
+var t={path:"./dist/",logger:2};export{t as default};

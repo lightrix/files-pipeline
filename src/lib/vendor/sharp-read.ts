@@ -1,5 +1,5 @@
-import type IMG from "./../../options/lib/compress/img.js";
-import defaultOptions from "./../../options/lib/compress/index.js";
+import type IMG from "../../options/lib/compress/img.js";
+import defaultOptions from "../../options/lib/compress/index.js";
 
 // rome-ignore lint:
 export default async (sharpFile: any, options: IMG = {}) => {
