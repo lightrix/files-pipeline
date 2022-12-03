@@ -104,7 +104,7 @@ export default async (
 		} catch (_error) {
 			if (typeof callbacks().failed === "function") {
 				// @ts-expect-error
-				console.log(callbacks().failed(inputPath));
+				console.log(await callbacks().failed(inputPath));
 			}
 		}
 	}
