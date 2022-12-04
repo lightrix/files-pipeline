@@ -1,1 +1,1 @@
-var t={path:"./dist/",logger:2};export{t as default};
+import*as t from"fs";const l={wrote:async e=>e,read:async e=>await t.promises.readFile(e,"utf-8"),passed:async()=>!0,failed:async e=>`Error: Cannot process file ${e} !`,accomplished:async(e,i,o,a)=>`Processed ${e} in ${i} .`,fulfilled:async e=>`Successfully processed a total of ${e.files} ${e.type.toUpperCase()} ${e.files===1?"file":"files"}.`,changed:async e=>e};var n={path:"./dist/",logger:2};export{l as callbacks,n as default};

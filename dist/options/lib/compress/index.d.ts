@@ -1,8 +1,20 @@
+/// <reference types="node" resolution-mode="require"/>
+/// <reference types="node" resolution-mode="require"/>
+/// <reference types="node" resolution-mode="require"/>
+/// <reference types="node" resolution-mode="require"/>
+import type { optionCallbacksFile, optionCallbacksPipe } from "../../index.js";
 import type CSS from "./css.js";
 import type HTML from "./html.js";
 import type IMG from "./img.js";
 import type JS from "./js.js";
 import type SVG from "./svg.js";
+export declare const callbacks: {
+    failed: (inputPath: optionCallbacksFile["inputPath"]) => Promise<string>;
+    passed: (fileSizeBefore: optionCallbacksFile["fileSizeBefore"], writeBuffer: string | NodeJS.ArrayBufferView | ArrayBuffer | SharedArrayBuffer) => Promise<boolean>;
+    accomplished: (inputPath: optionCallbacksFile["inputPath"], outputPath: optionCallbacksFile["outputPath"], fileSizeBefore: optionCallbacksFile["fileSizeBefore"], fileSizeAfter: optionCallbacksFile["fileSizeAfter"]) => Promise<string>;
+    fulfilled: (pipe: optionCallbacksPipe) => Promise<string>;
+    changed: (pipe: optionCallbacksPipe) => Promise<optionCallbacksPipe>;
+};
 export interface Options {
     [key: string]: any;
     css?: boolean | CSS;

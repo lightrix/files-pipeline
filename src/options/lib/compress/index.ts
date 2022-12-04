@@ -1,8 +1,52 @@
+import { deepmerge } from "deepmerge-ts";
+
+import formatBytes from "../../../lib/format-bytes.js";
+
+import { callbacks as defaultCallbacks } from "../../index.js";
+import type { optionCallbacksFile, optionCallbacksPipe } from "../../index.js";
+
 import type CSS from "./css.js";
 import type HTML from "./html.js";
 import type IMG from "./img.js";
 import type JS from "./js.js";
 import type SVG from "./svg.js";
+
+export const callbacks = deepmerge(defaultCallbacks, {
+	failed: async (inputPath: optionCallbacksFile["inputPath"]) =>
+		`Error: Cannot compress file ${inputPath} !`,
+	passed: async (
+		fileSizeBefore: optionCallbacksFile["fileSizeBefore"],
+		writeBuffer:
+			| string
+			| NodeJS.ArrayBufferView
+			| ArrayBuffer
+			| SharedArrayBuffer
+	) => fileSizeBefore > Buffer.byteLength(writeBuffer),
+	accomplished: async (
+		inputPath: optionCallbacksFile["inputPath"],
+		outputPath: optionCallbacksFile["outputPath"],
+		fileSizeBefore: optionCallbacksFile["fileSizeBefore"],
+		fileSizeAfter: optionCallbacksFile["fileSizeAfter"]
+	) =>
+		`Compressed ${inputPath} for ${await formatBytes(
+			fileSizeBefore - fileSizeAfter
+		)} (${(
+			((fileSizeBefore - fileSizeAfter) / fileSizeBefore) *
+			100
+		).toFixed(2)}% reduction) in ${outputPath}.`,
+	fulfilled: async (pipe: optionCallbacksPipe) =>
+		`Successfully compressed a total of ${
+			pipe.files
+		} ${pipe.type.toUpperCase()} ${
+			pipe.files === 1 ? "file" : "files"
+		} for ${await formatBytes(pipe.info.total)}.`,
+	changed: async (pipe: optionCallbacksPipe) => {
+		pipe.info.total =
+			(pipe.info.total ? pipe.info.total : 0) +
+			(pipe.current.fileSizeBefore - pipe.current.fileSizeAfter);
+		return pipe;
+	},
+});
 
 export interface Options {
 	// rome-ignore lint:
