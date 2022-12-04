@@ -10,9 +10,9 @@ export const callbacks = deepmerge(defaultCallbacks, {
 	failed: async (inputPath: string) =>
 		`Error: Cannot inline file ${inputPath} !`,
 	fulfilled: async (pipe: optionCallbacksPipe) =>
-		`Successfully inlined a total of ${
-			pipe.files
-		} ${pipe.type.toUpperCase()} ${pipe.files === 1 ? "file" : "files"}.`,
+		`Successfully inlined a total of ${pipe.files} ${pipe.type} ${
+			pipe.files === 1 ? "file" : "files"
+		}.`,
 	accomplished: false,
 });
 

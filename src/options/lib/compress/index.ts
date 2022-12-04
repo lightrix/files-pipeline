@@ -35,9 +35,7 @@ export const callbacks = deepmerge(defaultCallbacks, {
 			100
 		).toFixed(2)}% reduction) in ${outputPath}.`,
 	fulfilled: async (pipe: optionCallbacksPipe) =>
-		`Successfully compressed a total of ${
-			pipe.files
-		} ${pipe.type.toUpperCase()} ${
+		`Successfully compressed a total of ${pipe.files} ${pipe.type} ${
 			pipe.files === 1 ? "file" : "files"
 		} for ${await formatBytes(pipe.info.total)}.`,
 	changed: async (pipe: optionCallbacksPipe) => {

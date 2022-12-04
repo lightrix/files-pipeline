@@ -83,7 +83,7 @@ export default class pipeline {
 					case "css": {
 						await (
 							await (
-								await new files(this.options.logger, "css").in(
+								await new files(this.options.logger, "CSS").in(
 									path
 								)
 							).by("**/*.css")
@@ -101,7 +101,7 @@ export default class pipeline {
 					case "html": {
 						await (
 							await (
-								await new files(this.options.logger, "html").in(
+								await new files(this.options.logger, "HTML").in(
 									path
 								)
 							).by("**/*.html")
@@ -118,7 +118,7 @@ export default class pipeline {
 					case "js": {
 						await (
 							await (
-								await new files(this.options.logger, "js").in(
+								await new files(this.options.logger, "JS").in(
 									path
 								)
 							).by("**/*.{js,mjs,cjs}")
@@ -137,7 +137,7 @@ export default class pipeline {
 					case "img": {
 						await (
 							await (
-								await new files(this.options.logger, "img").in(
+								await new files(this.options.logger, "IMG").in(
 									path
 								)
 							).by(
@@ -162,7 +162,7 @@ export default class pipeline {
 					case "svg": {
 						await (
 							await (
-								await new files(this.options.logger, "svg").in(
+								await new files(this.options.logger, "SVG").in(
 									path
 								)
 							).by("**/*.svg")
@@ -179,7 +179,7 @@ export default class pipeline {
 									if (
 										typeof result["error"] !== "undefined"
 									) {
-										log.error("", result["error"]);
+										console.error(result["error"]);
 									}
 
 									if (typeof result["data"] !== "undefined") {
@@ -230,7 +230,7 @@ export default class pipeline {
 
 			await (
 				await (
-					await new files(this.options.logger, "html").in(path)
+					await new files(this.options.logger, "HTML").in(path)
 				).by("**/*.html")
 			)
 				.not(this.options.exclude)
