@@ -2,20 +2,16 @@
 /// <reference types="node" resolution-mode="require"/>
 /// <reference types="node" resolution-mode="require"/>
 /// <reference types="node" resolution-mode="require"/>
+/// <reference types="node" resolution-mode="require"/>
+/// <reference types="node" resolution-mode="require"/>
+import type { Options as OptionsBase } from "../../index.js";
 import type { optionCallbacksFile, optionCallbacksPipe } from "../../index.js";
 import type CSS from "./css.js";
 import type HTML from "./html.js";
 import type IMG from "./img.js";
 import type JS from "./js.js";
 import type SVG from "./svg.js";
-export declare const callbacks: {
-    failed: (inputPath: optionCallbacksFile["inputPath"]) => Promise<string>;
-    passed: (fileSizeBefore: optionCallbacksFile["fileSizeBefore"], writeBuffer: string | NodeJS.ArrayBufferView | ArrayBuffer | SharedArrayBuffer) => Promise<boolean>;
-    accomplished: (inputPath: optionCallbacksFile["inputPath"], outputPath: optionCallbacksFile["outputPath"], fileSizeBefore: optionCallbacksFile["fileSizeBefore"], fileSizeAfter: optionCallbacksFile["fileSizeAfter"]) => Promise<string>;
-    fulfilled: (pipe: optionCallbacksPipe) => Promise<string>;
-    changed: (pipe: optionCallbacksPipe) => Promise<optionCallbacksPipe>;
-};
-export interface Options {
+export interface Options extends OptionsBase {
     [key: string]: any;
     css?: boolean | CSS;
     html?: boolean | HTML;
@@ -99,6 +95,15 @@ declare const _default: {
             pretty: false;
         };
         plugins: "preset-default"[];
+    };
+    pipeline: {
+        wrote: (_file: string, data: string) => Promise<string>;
+        read: (file: import("fs").PathLike | import("fs/promises").FileHandle) => Promise<string>;
+        passed: (fileSizeBefore: optionCallbacksFile["fileSizeBefore"], writeBuffer: string | NodeJS.ArrayBufferView | ArrayBuffer | SharedArrayBuffer) => Promise<boolean>;
+        failed: (inputPath: optionCallbacksFile["inputPath"]) => Promise<string>;
+        accomplished: (inputPath: optionCallbacksFile["inputPath"], outputPath: optionCallbacksFile["outputPath"], fileSizeBefore: optionCallbacksFile["fileSizeBefore"], fileSizeAfter: optionCallbacksFile["fileSizeAfter"]) => Promise<string>;
+        fulfilled: (pipe: optionCallbacksPipe) => Promise<string>;
+        changed: (pipe: optionCallbacksPipe) => Promise<optionCallbacksPipe>;
     };
 };
 export default _default;

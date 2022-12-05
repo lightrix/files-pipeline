@@ -1,7 +1,7 @@
 import { deepmerge } from "deepmerge-ts";
 import { fileURLToPath } from "url";
 
-import defaultOptions from "./options/index.js";
+import defaultOptions, { optionCallbacksPipe } from "./options/index.js";
 import type { Options, optionPath } from "./options/index.js";
 
 import files from "./lib/files.js";
@@ -16,9 +16,7 @@ import { minify as terser } from "terser";
 
 import type { Options as CompressOptions } from "./options/lib/compress/index.js";
 
-import defaultCompressOptions, {
-	callbacks as callbacksCompress,
-} from "./options/lib/compress/index.js";
+import defaultCompressOptions from "./options/lib/compress/index.js";
 
 import sharpRead from "./lib/vendor/sharp-read.js";
 
@@ -28,9 +26,8 @@ import Critters from "critters";
 
 import type { Options as CrittersOptions } from "./options/lib/critters/index.js";
 
-import defaultCrittersOptions, {
-	callbacks as callbacksCritters,
-} from "./options/lib/critters/index.js";
+import defaultCrittersOptions from "./options/lib/critters/index.js";
+import formatBytes from "./lib/format-bytes.js";
 
 export default class pipeline {
 	options: Options;
@@ -70,6 +67,20 @@ export default class pipeline {
 		}
 	}
 
+	async process() {
+		for (const path of this.paths) {
+			await (
+				await (
+					await new files(this.options.logger).in(path)
+				).by(this.options.files)
+			)
+				.not(this.options.exclude)
+				.apply(this.options.pipeline);
+		}
+
+		return this;
+	}
+
 	async compress() {
 		this.mergeDefaultOptions(defaultCompressOptions);
 
@@ -83,17 +94,28 @@ export default class pipeline {
 					case "css": {
 						await (
 							await (
-								await new files(this.options.logger, "CSS").in(
-									path
-								)
+								await new files(this.options.logger).in(path)
 							).by("**/*.css")
 						)
 							.not(this.options.exclude)
-							.apply({
-								...callbacksCompress,
-								wrote: async (data: string) =>
-									csso(data, setting).css,
-							});
+							.apply(
+								deepmerge(defaultCompressOptions.pipeline, {
+									wrote: async (
+										_file: string,
+										data: string
+									) => csso(data, setting).css,
+									fulfilled: async (
+										pipe: optionCallbacksPipe
+									) =>
+										`Successfully compressed a total of ${
+											pipe.files
+										} CSS ${
+											pipe.files === 1 ? "file" : "files"
+										} for ${await formatBytes(
+											pipe.info.total
+										)}.`,
+								})
+							);
 
 						break;
 					}
@@ -101,92 +123,139 @@ export default class pipeline {
 					case "html": {
 						await (
 							await (
-								await new files(this.options.logger, "HTML").in(
-									path
-								)
+								await new files(this.options.logger).in(path)
 							).by("**/*.html")
 						)
 							.not(this.options.exclude)
-							.apply({
-								...callbacksCompress,
-								wrote: async (data: string) =>
-									await htmlMinifierTerser(data, setting),
-							});
+							.apply(
+								deepmerge(defaultCompressOptions.pipeline, {
+									wrote: async (
+										_file: string,
+										data: string
+									) =>
+										await htmlMinifierTerser(data, setting),
+									fulfilled: async (
+										pipe: optionCallbacksPipe
+									) =>
+										`Successfully compressed a total of ${
+											pipe.files
+										} HTML ${
+											pipe.files === 1 ? "file" : "files"
+										} for ${await formatBytes(
+											pipe.info.total
+										)}.`,
+								})
+							);
 						break;
 					}
 
 					case "js": {
 						await (
 							await (
-								await new files(this.options.logger, "JS").in(
-									path
-								)
+								await new files(this.options.logger).in(path)
 							).by("**/*.{js,mjs,cjs}")
 						)
 							.not(this.options.exclude)
-							.apply({
-								...callbacksCompress,
-								wrote: async (data: string) =>
-									(
-										await terser(data, setting)
-									).code,
-							});
+							.apply(
+								deepmerge(defaultCompressOptions.pipeline, {
+									wrote: async (
+										_file: string,
+										data: string
+									) => (await terser(data, setting)).code,
+									fulfilled: async (
+										pipe: optionCallbacksPipe
+									) =>
+										`Successfully compressed a total of ${
+											pipe.files
+										} JS ${
+											pipe.files === 1 ? "file" : "files"
+										} for ${await formatBytes(
+											pipe.info.total
+										)}.`,
+								})
+							);
 						break;
 					}
 
 					case "img": {
 						await (
 							await (
-								await new files(this.options.logger, "IMG").in(
-									path
-								)
+								await new files(this.options.logger).in(path)
 							).by(
 								"**/*.{avci,avcs,avif,avifs,gif,heic,heics,heif,heifs,jfif,jif,jpe,jpeg,jpg,png,raw,tiff,webp}"
 							)
 						)
 							.not(this.options.exclude)
-							.apply({
-								...callbacksCompress,
-								wrote: async (sharpFile: any) =>
-									await sharpRead(sharpFile, setting),
-								read: async (file: string) =>
-									sharp(file, {
-										failOn: "none",
-										sequentialRead: true,
-										unlimited: true,
-									}),
-							});
+							.apply(
+								deepmerge(defaultCompressOptions.pipeline, {
+									// rome-ignore lint:
+									wrote: async (sharpFile: any) =>
+										await sharpRead(sharpFile, setting),
+									read: async (file: string) =>
+										sharp(file, {
+											failOn: "none",
+											sequentialRead: true,
+											unlimited: true,
+										}),
+									fulfilled: async (
+										pipe: optionCallbacksPipe
+									) =>
+										`Successfully compressed a total of ${
+											pipe.files
+										} IMG ${
+											pipe.files === 1 ? "file" : "files"
+										} for ${await formatBytes(
+											pipe.info.total
+										)}.`,
+								})
+							);
 						break;
 					}
 
 					case "svg": {
 						await (
 							await (
-								await new files(this.options.logger, "SVG").in(
-									path
-								)
+								await new files(this.options.logger).in(path)
 							).by("**/*.svg")
 						)
 							.not(this.options.exclude)
-							.apply({
-								...callbacksCompress,
-								wrote: async (data: string) => {
-									const result = svgo(data, setting) as {
-										// rome-ignore lint:
-										[key: string]: any;
-									};
+							.apply(
+								deepmerge(defaultCompressOptions.pipeline, {
+									wrote: async (
+										_file: string,
+										data: string
+									) => {
+										const result = svgo(data, setting) as {
+											// rome-ignore lint:
+											[key: string]: any;
+										};
 
-									if (
-										typeof result["error"] !== "undefined"
-									) {
-										console.error(result["error"]);
-									}
+										if (
+											typeof result["error"] !==
+											"undefined"
+										) {
+											console.error(result["error"]);
+										}
 
-									if (typeof result["data"] !== "undefined") {
-										return result["data"];
-									}
-								},
-							});
+										if (
+											typeof result["data"] !==
+											"undefined"
+										) {
+											return result["data"];
+										}
+									},
+									fulfilled: async (
+										pipe: optionCallbacksPipe
+									) =>
+										`Successfully compressed a total of ${
+											pipe.files
+										} SVG ${
+											pipe.files === 1 ? "file" : "files"
+										} for ${await formatBytes(
+											pipe.info.total
+										)}.`,
+								})
+							);
 						break;
 					}
 
@@ -230,14 +299,15 @@ export default class pipeline {
 
 			await (
 				await (
-					await new files(this.options.logger, "HTML").in(path)
+					await new files(this.options.logger).in(path)
 				).by("**/*.html")
 			)
 				.not(this.options.exclude)
-				.apply({
-					...callbacksCritters,
-					wrote: (data: string) => critters.process(data),
-				});
+				.apply(
+					deepmerge(defaultCrittersOptions.pipeline, {
+						wrote: (data: string) => critters.process(data),
+					})
+				);
 		}
 
 		return this;

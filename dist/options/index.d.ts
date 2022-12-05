@@ -1,10 +1,11 @@
 /// <reference types="node" resolution-mode="require"/>
 /// <reference types="node" resolution-mode="require"/>
+import * as fs from "fs";
+import type { Pattern } from "fast-glob";
 export interface optionCallbacksPipe {
     debug: number;
     files: number;
     current: optionCallbacksFile;
-    type: string;
     info: any;
 }
 export interface optionCallbacksFile {
@@ -20,19 +21,30 @@ export interface functionCallbacks {
     changed?: (pipe: optionCallbacksPipe) => Promise<optionCallbacksPipe>;
     passed?: (fileSizeBefore: optionCallbacksFile["fileSizeBefore"], writeBuffer: string | NodeJS.ArrayBufferView | ArrayBuffer | SharedArrayBuffer) => Promise<boolean>;
     read?: (file: string) => Promise<any>;
-    wrote?: (data: string) => Promise<any>;
+    wrote?: (data: string, file: string) => Promise<any>;
 }
-export declare const callbacks: functionCallbacks;
-export type optionPath = string | URL | Map<string | URL, string | URL>;
+export type optionPath = string | URL | Map<string | URL, string | URL> | false;
 export type optionExclude = string | RegExp | ((file: string) => boolean);
 export interface Options {
     [key: string]: any;
     path?: optionPath | optionPath[] | Set<optionPath>;
     exclude?: optionExclude | optionExclude[] | Set<optionExclude>;
+    files?: Pattern | Pattern[];
+    type?: string;
+    pipeline?: functionCallbacks;
     logger?: 0 | 1 | 2;
 }
 declare const _default: {
     path: string;
-    logger: number;
+    logger: 2;
+    pipeline: {
+        wrote: (_file: string, data: string) => Promise<string>;
+        read: (file: fs.PathLike | fs.promises.FileHandle) => Promise<string>;
+        passed: () => Promise<true>;
+        failed: (inputPath: optionCallbacksFile["inputPath"]) => Promise<string>;
+        accomplished: (inputPath: optionCallbacksFile["inputPath"], outputPath: optionCallbacksFile["outputPath"], _fileSizeBefore: optionCallbacksFile["fileSizeBefore"], _fileSizeAfter: optionCallbacksFile["fileSizeAfter"]) => Promise<string>;
+        fulfilled: (pipe: optionCallbacksPipe) => Promise<string>;
+        changed: (pipe: optionCallbacksPipe) => Promise<optionCallbacksPipe>;
+    };
 };
 export default _default;

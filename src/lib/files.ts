@@ -2,6 +2,8 @@ import * as fs from "fs";
 import { fileURLToPath } from "url";
 import { dirname } from "path";
 import FastGlob from "fast-glob";
+import type { Pattern } from "fast-glob";
+import defaultOptions from "../options/index.js";
 
 import type { Options, optionPath } from "../options/index.js";
 import type {
@@ -16,13 +18,9 @@ export default class {
 	results: Map<string, string> = new Map();
 	pipe: optionCallbacksPipe;
 
-	constructor(
-		debug: optionCallbacksPipe["debug"] = 2,
-		type: optionCallbacksPipe["type"]
-	) {
+	constructor(debug: optionCallbacksPipe["debug"] = 2) {
 		this.pipe = {
 			files: 0,
-			type,
 			debug,
 			info: {},
 			current: {
@@ -36,7 +34,11 @@ export default class {
 		return this;
 	}
 
-	async in(path: optionPath) {
+	async in(path: optionPath = false) {
+		if (!path) {
+			return this;
+		}
+
 		const _path = applyTo(
 			applyTo(path, (url: URL | string) =>
 				url instanceof URL ? fileURLToPath(url) : url
@@ -55,9 +57,13 @@ export default class {
 		return this;
 	}
 
-	async by(glob: string) {
+	async by(glob: Pattern | Pattern[] | false = false) {
+		if (!glob) {
+			return this;
+		}
+
 		for (const [input, output] of this.paths) {
-			for (const file of await FastGlob(`${glob}`, {
+			for (const file of await FastGlob(glob, {
 				cwd: input,
 				onlyFiles: true,
 			})) {
@@ -102,13 +108,14 @@ export default class {
 		return this;
 	}
 
-	async apply(callbacks: functionCallbacks) {
+	async apply(callbacks: functionCallbacks = defaultOptions.pipeline) {
 		for (const [outputPath, inputPath] of this.results) {
 			try {
 				const fileSizeBefore = (await fs.promises.stat(inputPath)).size;
 
 				if (callbacks.read && callbacks.wrote) {
 					const writeBuffer = await callbacks.wrote(
+						inputPath,
 						await callbacks.read(inputPath)
 					);
 
