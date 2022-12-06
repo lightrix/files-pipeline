@@ -1,3 +1,7 @@
+## 0.1.0
+
+-   Expose process method
+
 ## 0.0.12
 
 -   Bug fix
