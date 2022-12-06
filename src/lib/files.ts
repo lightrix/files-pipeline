@@ -178,6 +178,7 @@ export default class {
 					}
 				}
 			} catch (_error) {
+				console.log(_error);
 				this.results.delete(outputPath);
 
 				if (typeof callbacks.failed === "function") {

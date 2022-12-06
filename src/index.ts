@@ -189,8 +189,8 @@ export default class pipeline {
 							.apply(
 								deepmerge(defaultCompressOptions.pipeline, {
 									// rome-ignore lint:
-									wrote: async (sharpFile: any) =>
-										await sharpRead(sharpFile, setting),
+									wrote: async (_file: string, data: any) =>
+										await sharpRead(data, setting),
 									read: async (file: string) =>
 										sharp(file, {
 											failOn: "none",
@@ -305,7 +305,8 @@ export default class pipeline {
 				.not(this.options.exclude)
 				.apply(
 					deepmerge(defaultCrittersOptions.pipeline, {
-						wrote: (data: string) => critters.process(data),
+						wrote: (_file: string, data: string) =>
+							critters.process(data),
 					})
 				);
 		}
