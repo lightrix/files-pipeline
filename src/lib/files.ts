@@ -138,11 +138,19 @@ export default class {
 							});
 						}
 
-						await fs.promises.writeFile(
-							outputPath,
-							writeBuffer,
-							"utf-8"
-						);
+						console.log(`output path: ${outputPath}`);
+
+						try {
+							await fs.promises.writeFile(
+								outputPath,
+								writeBuffer,
+								"utf-8"
+							);
+						} catch (_error) {
+							console.log(`error: ${_error}`);
+						}
+
+						console.log(`wrote: ${outputPath}`);
 
 						const fileSizeAfter = (
 							await fs.promises.stat(outputPath)
