@@ -22,9 +22,30 @@ new pipeline({
 
 ## Getting started
 
-The pipeline will now provide you two methods which you can use to compress all
-your CSS, HTML and JavaScript or inline the critical CSS in the HTML files in
-that directory.
+The pipeline will not provide you with a process method which you can use to
+call the callbacks on each file of the pipeline.
+
+**`index.ts`**
+
+```ts
+import pipeline from "@nikolarhristov/pipeline";
+
+await new pipeline({
+	path: "./input/",
+	files: "**/*.md",
+	pipeline: {
+		wrote: (file: string, data: string) => {
+			// prepend or append some content to all text files
+			data += "LICENSE [MIT]";
+
+			return data;
+		},
+	},
+}).process();
+```
+
+The pipeline has built in methods which you can use to compress your CSS, HTML
+and JavaScript or inline the critical CSS in the HTML files in that directory.
 
 **`index.ts`**
 

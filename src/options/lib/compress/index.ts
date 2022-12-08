@@ -49,7 +49,7 @@ export default {
 		processConditionalComments: false,
 		removeAttributeQuotes: true,
 		removeComments: true,
-		ignoreCustomComments: [/^\s*#/, /^\s*!/, /^\s*\//],
+		ignoreCustomComments: [/^\s*#/, /^\s*\[/, /^\s*\]/, /^\s*!/, /^\s*\//],
 		removeScriptTypeAttributes: true,
 		removeStyleLinkTypeAttributes: true,
 		removeTagWhitespace: false,
