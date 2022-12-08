@@ -73,7 +73,7 @@ export default {
 			await fs.promises.readFile(file, "utf-8"),
 		passed: async () => true,
 		failed: async (inputPath: optionCallbacksFile["inputPath"]) =>
-			`Error: Cannot process file ${inputPath} !`,
+			`Error: Cannot process file ${inputPath}!`,
 		accomplished: async (
 			inputPath: optionCallbacksFile["inputPath"],
 			outputPath: optionCallbacksFile["outputPath"],

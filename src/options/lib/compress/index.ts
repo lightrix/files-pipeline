@@ -107,7 +107,7 @@ export default {
 	},
 	pipeline: deepmerge(defaultOptions.pipeline, {
 		failed: async (inputPath: optionCallbacksFile["inputPath"]) =>
-			`Error: Cannot compress file ${inputPath} !`,
+			`Error: Cannot compress file ${inputPath}!`,
 		passed: async (
 			fileSizeBefore: optionCallbacksFile["fileSizeBefore"],
 			writeBuffer:

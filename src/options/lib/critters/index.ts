@@ -24,7 +24,7 @@ export default {
 	},
 	pipeline: deepmerge(defaultOptions.pipeline, {
 		failed: async (inputPath: string) =>
-			`Error: Cannot inline file ${inputPath} !`,
+			`Error: Cannot inline file ${inputPath}!`,
 		fulfilled: async (pipe: optionCallbacksPipe) =>
 			`Successfully inlined a total of ${pipe.files} HTML ${
 				pipe.files === 1 ? "file" : "files"
