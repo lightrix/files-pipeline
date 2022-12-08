@@ -138,19 +138,11 @@ export default class {
 							});
 						}
 
-						console.log(`output path: ${outputPath}`);
-
-						try {
-							await fs.promises.writeFile(
-								outputPath,
-								writeBuffer,
-								"utf-8"
-							);
-						} catch (_error) {
-							console.log(`error: ${_error}`);
-						}
-
-						console.log(`wrote: ${outputPath}`);
+						await fs.promises.writeFile(
+							outputPath,
+							writeBuffer,
+							"utf-8"
+						);
 
 						const fileSizeAfter = (
 							await fs.promises.stat(outputPath)
@@ -186,7 +178,6 @@ export default class {
 					}
 				}
 			} catch (_error) {
-				console.log(_error);
 				this.results.delete(outputPath);
 
 				if (typeof callbacks.failed === "function") {
