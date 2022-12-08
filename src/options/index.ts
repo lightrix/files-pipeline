@@ -79,7 +79,7 @@ export default {
 			outputPath: optionCallbacksFile["outputPath"],
 			_fileSizeBefore: optionCallbacksFile["fileSizeBefore"],
 			_fileSizeAfter: optionCallbacksFile["fileSizeAfter"]
-		) => `Processed ${inputPath} in ${outputPath} .`,
+		) => `Processed ${inputPath} in ${outputPath}.`,
 		fulfilled: async (pipe: optionCallbacksPipe) =>
 			`Successfully processed a total of ${pipe.files} ${
 				pipe.files === 1 ? "file" : "files"

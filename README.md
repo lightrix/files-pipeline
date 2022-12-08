@@ -44,6 +44,34 @@ await new pipeline({
 }).process();
 ```
 
+These are the defaults for each callback.
+
+```ts
+import pipeline from "@nikolarhristov/pipeline";
+
+await new pipeline({
+	pipeline: {
+		wrote: async (_file: string, data: string) => data,
+		read: async (file: fs.PathLike | fs.promises.FileHandle) =>
+			await fs.promises.readFile(file, "utf-8"),
+		passed: async () => true,
+		failed: async (inputPath: optionCallbacksFile["inputPath"]) =>
+			`Error: Cannot process file ${inputPath} !`,
+		accomplished: async (
+			inputPath: optionCallbacksFile["inputPath"],
+			outputPath: optionCallbacksFile["outputPath"],
+			_fileSizeBefore: optionCallbacksFile["fileSizeBefore"],
+			_fileSizeAfter: optionCallbacksFile["fileSizeAfter"]
+		) => `Processed ${inputPath} in ${outputPath}.`,
+		fulfilled: async (pipe: optionCallbacksPipe) =>
+			`Successfully processed a total of ${pipe.files} ${
+				pipe.files === 1 ? "file" : "files"
+			}.`,
+		changed: async (pipe) => pipe,
+	},
+});
+```
+
 The pipeline has built in methods which you can use to compress your CSS, HTML
 and JavaScript or inline the critical CSS in the HTML files in that directory.
 
