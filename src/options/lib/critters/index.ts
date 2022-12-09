@@ -1,4 +1,4 @@
-import { deepmerge } from "deepmerge-ts";
+import deepmerge from "../../../lib/deepmerge.js";
 
 import type { Options as OptionsBase } from "../../index.js";
 

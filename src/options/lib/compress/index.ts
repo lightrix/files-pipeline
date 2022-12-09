@@ -1,4 +1,5 @@
-import { deepmerge } from "deepmerge-ts";
+import formatBytes from "../../../lib/format-bytes.js";
+import deepmerge from "../../../lib/deepmerge.js";
 
 import type { Options as OptionsBase } from "../../index.js";
 
@@ -10,8 +11,6 @@ import type HTML from "./html.js";
 import type IMG from "./img.js";
 import type JS from "./js.js";
 import type SVG from "./svg.js";
-
-import formatBytes from "../../../lib/format-bytes.js";
 
 export interface Options extends OptionsBase {
 	// rome-ignore lint:

@@ -1,4 +1,3 @@
-import { deepmerge } from "deepmerge-ts";
 import { fileURLToPath } from "url";
 
 import defaultOptions, { optionCallbacksPipe } from "./options/index.js";
@@ -28,6 +27,7 @@ import type { Options as CrittersOptions } from "./options/lib/critters/index.js
 
 import defaultCrittersOptions from "./options/lib/critters/index.js";
 import formatBytes from "./lib/format-bytes.js";
+import deepmerge from "./lib/deepmerge.js";
 
 export default class pipeline {
 	options: Options;
