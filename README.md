@@ -35,7 +35,7 @@ await new pipeline({
 	files: "**/*.md",
 	pipeline: {
 		wrote: (file: string, data: string) => {
-			// prepend or append some content to all of the text files
+			// prepend or append some content to all the text files
 			data += "LICENSE [MIT]";
 
 			return data;
