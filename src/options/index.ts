@@ -1,8 +1,14 @@
 import * as fs from "fs";
 import type { Pattern } from "fast-glob";
 
+export type optionDebug = 0 | 1 | 2;
+
+export type optionPath = string | URL | Map<string | URL, string | URL> | false;
+
+export type optionExclude = string | RegExp | ((file: string) => boolean);
+
 export interface optionCallbacksPipe {
-	debug: number;
+	debug: optionDebug;
 	files: number;
 	current: optionCallbacksFile;
 	// rome-ignore lint:
@@ -44,9 +50,6 @@ export interface functionCallbacks {
 	wrote?: (data: string, file: string) => Promise<any>;
 }
 
-export type optionPath = string | URL | Map<string | URL, string | URL> | false;
-export type optionExclude = string | RegExp | ((file: string) => boolean);
-
 export interface Options {
 	// rome-ignore lint:
 	[key: string]: any;
@@ -61,7 +64,7 @@ export interface Options {
 
 	pipeline?: functionCallbacks;
 
-	logger?: 0 | 1 | 2;
+	logger?: optionDebug;
 }
 
 export default {

@@ -13,7 +13,7 @@ Then, create a new pipeline from this component:
 **`index.ts`**
 
 ```ts
-import pipeline from "@nikolarhristov/pipeline";
+import { pipeline } from "@nikolarhristov/pipeline";
 
 new pipeline({
 	path: "./input/",
@@ -22,13 +22,13 @@ new pipeline({
 
 ## Getting started
 
-The pipeline will not provide you with a process method which you can use to
-call the callbacks on each file of the pipeline.
+The pipeline will now provide you with a process method which you can use to
+call the callback on each file from the pipeline.
 
 **`index.ts`**
 
 ```ts
-import pipeline from "@nikolarhristov/pipeline";
+import { pipeline } from "@nikolarhristov/pipeline";
 
 await new pipeline({
 	path: "./input/",
@@ -47,7 +47,7 @@ await new pipeline({
 These are the defaults for each callback.
 
 ```ts
-import pipeline from "@nikolarhristov/pipeline";
+import { pipeline } from "@nikolarhristov/pipeline";
 
 await new pipeline({
 	pipeline: {
@@ -78,7 +78,7 @@ and JavaScript or inline the critical CSS in the HTML files in that directory.
 **`index.ts`**
 
 ```ts
-import pipeline from "@nikolarhristov/pipeline";
+import { pipeline } from "@nikolarhristov/pipeline";
 
 await (
 	await new pipeline({
@@ -124,7 +124,7 @@ or disable them entirely:
 **`index.ts`**
 
 ```ts
-import pipeline from "@nikolarhristov/pipeline";
+import { pipeline } from "@nikolarhristov/pipeline";
 
 new pipeline({
 	path: "./input/",
@@ -143,7 +143,7 @@ the `path` variable.
 **`index.ts`**
 
 ```ts
-import pipeline from "@nikolarhristov/pipeline";
+import { pipeline } from "@nikolarhristov/pipeline";
 
 new pipeline({
 	path: ["./input/", "./input2/"],
@@ -155,7 +155,7 @@ You can also provide a map of paths for different input output directories.
 **`index.ts`**
 
 ```ts
-import pipeline from "@nikolarhristov/pipeline";
+import { pipeline } from "@nikolarhristov/pipeline";
 
 new pipeline({
 	path: new Map([["./input", "./output"]]),
@@ -167,7 +167,7 @@ Or an array of the two.
 **`index.ts`**
 
 ```ts
-import pipeline from "@nikolarhristov/pipeline";
+import { pipeline } from "@nikolarhristov/pipeline";
 
 new pipeline({
 	path: ["./input", new Map([["./input", "./output"]])],
@@ -181,7 +181,7 @@ file names.
 **`index.ts`**
 
 ```ts
-import pipeline from "@nikolarhristov/pipeline";
+import { pipeline } from "@nikolarhristov/pipeline";
 
 new pipeline({
 	exclude: [
@@ -197,7 +197,7 @@ Set `logger` to `0` if you do not want to see debug messages. Default is `2`.
 **`index.ts`**
 
 ```ts
-import pipeline from "@nikolarhristov/pipeline";
+import { pipeline } from "@nikolarhristov/pipeline";
 
 new pipeline({
 	logger: 0,

@@ -3,6 +3,7 @@ import { fileURLToPath } from "url";
 import { dirname } from "path";
 import FastGlob from "fast-glob";
 import type { Pattern } from "fast-glob";
+
 import defaultOptions from "../options/index.js";
 
 import type { Options, optionPath } from "../options/index.js";
@@ -15,10 +16,12 @@ import applyTo from "./apply-to.js";
 
 export default class {
 	paths: Map<string, string> = new Map();
+
 	results: Map<string, string> = new Map();
+
 	pipe: optionCallbacksPipe;
 
-	constructor(debug: optionCallbacksPipe["debug"] = 2) {
+	constructor(debug: optionCallbacksPipe["debug"] = 2.0) {
 		this.pipe = {
 			files: 0,
 			debug,
@@ -30,8 +33,6 @@ export default class {
 				fileSizeBefore: 0,
 			},
 		};
-
-		return this;
 	}
 
 	async in(path: optionPath = false) {
@@ -75,7 +76,7 @@ export default class {
 	}
 
 	not(pattern: Options["exclude"]) {
-		let filters = new Set();
+		const filters = new Set();
 
 		if (typeof pattern !== "undefined") {
 			if (pattern instanceof Array || pattern instanceof Set) {

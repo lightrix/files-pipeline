@@ -1,10 +1,2 @@
-import type { Options, optionPath } from "./options/index.js";
-export default class pipeline {
-    options: Options;
-    paths: Set<optionPath>;
-    constructor(options?: Options);
-    private mergeDefaultOptions;
-    process(): Promise<this>;
-    compress(): Promise<this>;
-    critters(): Promise<this>;
-}
+export { default as files } from "./lib/files.js";
+export { default as pipeline } from "./lib/pipeline.js";

@@ -2,8 +2,11 @@
 /// <reference types="node" resolution-mode="require"/>
 import * as fs from "fs";
 import type { Pattern } from "fast-glob";
+export type optionDebug = 0 | 1 | 2;
+export type optionPath = string | URL | Map<string | URL, string | URL> | false;
+export type optionExclude = string | RegExp | ((file: string) => boolean);
 export interface optionCallbacksPipe {
-    debug: number;
+    debug: optionDebug;
     files: number;
     current: optionCallbacksFile;
     info: any;
@@ -23,8 +26,6 @@ export interface functionCallbacks {
     read?: (file: string) => Promise<any>;
     wrote?: (data: string, file: string) => Promise<any>;
 }
-export type optionPath = string | URL | Map<string | URL, string | URL> | false;
-export type optionExclude = string | RegExp | ((file: string) => boolean);
 export interface Options {
     [key: string]: any;
     path?: optionPath | optionPath[] | Set<optionPath>;
@@ -32,7 +33,7 @@ export interface Options {
     files?: Pattern | Pattern[];
     type?: string;
     pipeline?: functionCallbacks;
-    logger?: 0 | 1 | 2;
+    logger?: optionDebug;
 }
 declare const _default: {
     path: string;
