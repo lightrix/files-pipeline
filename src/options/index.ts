@@ -3,25 +3,6 @@ import type { Pattern } from "fast-glob";
 
 export type optionDebug = 0 | 1 | 2;
 
-export type optionPath = string | URL | Map<string | URL, string | URL> | false;
-
-export type optionExclude = string | RegExp | ((file: string) => boolean);
-
-export interface optionCallbacksPipe {
-	debug: optionDebug;
-	files: number;
-	current: optionCallbacksFile;
-	// rome-ignore lint:
-	info: any;
-}
-
-export interface optionCallbacksFile {
-	inputPath: string;
-	outputPath: string;
-	fileSizeAfter: number;
-	fileSizeBefore: number;
-}
-
 export interface functionCallbacks {
 	fulfilled?: boolean | ((pipe: optionCallbacksPipe) => Promise<string>);
 	failed?:
@@ -50,6 +31,10 @@ export interface functionCallbacks {
 	wrote?: (file: string, data: string) => Promise<any>;
 }
 
+export type optionExclude = string | RegExp | ((file: string) => boolean);
+
+export type optionPath = string | URL | Map<string | URL, string | URL> | false;
+
 export interface Options {
 	// rome-ignore lint:
 	[key: string]: any;
@@ -65,6 +50,21 @@ export interface Options {
 	pipeline?: functionCallbacks;
 
 	logger?: optionDebug;
+}
+
+export interface optionCallbacksPipe {
+	debug: optionDebug;
+	files: number;
+	current: optionCallbacksFile;
+	// rome-ignore lint:
+	info: any;
+}
+
+export interface optionCallbacksFile {
+	inputPath: string;
+	outputPath: string;
+	fileSizeAfter: number;
+	fileSizeBefore: number;
 }
 
 export default {

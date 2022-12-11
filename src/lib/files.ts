@@ -19,20 +19,20 @@ export default class {
 
 	results: Map<string, string> = new Map();
 
-	pipe: optionCallbacksPipe;
+	pipe: optionCallbacksPipe = {
+		files: 0,
+		debug: 2,
+		info: {},
+		current: {
+			inputPath: "",
+			outputPath: "",
+			fileSizeAfter: 0,
+			fileSizeBefore: 0,
+		},
+	};
 
-	constructor(debug: optionCallbacksPipe["debug"] = 2.0) {
-		this.pipe = {
-			files: 0,
-			debug,
-			info: {},
-			current: {
-				inputPath: "",
-				outputPath: "",
-				fileSizeAfter: 0,
-				fileSizeBefore: 0,
-			},
-		};
+	constructor(debug: optionCallbacksPipe["debug"] = 2) {
+		this.pipe.debug = debug;
 	}
 
 	async in(path: optionPath = false) {
