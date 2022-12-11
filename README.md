@@ -34,12 +34,8 @@ await new pipeline({
 	path: "./input/",
 	files: "**/*.md",
 	pipeline: {
-		wrote: (file: string, data: string) => {
-			// prepend or append some content to all the text files
-			data += "LICENSE [MIT]";
-
-			return data;
-		},
+		// Prepend some content to all of the text files
+		wrote: (current) => (current.buffer += "LICENSE [MIT]"),
 	},
 }).process();
 ```
@@ -48,22 +44,18 @@ These are the defaults for each callback.
 
 ```ts
 import { pipeline } from "@nikolarhristov/pipeline";
+import * as fs from "fs";
 
 await new pipeline({
 	pipeline: {
-		wrote: async (_file: string, data: string) => data,
-		read: async (file: fs.PathLike | fs.promises.FileHandle) =>
-			await fs.promises.readFile(file, "utf-8"),
+		wrote: async (current) => current.buffer,
+		read: async (current) =>
+			await fs.promises.readFile(current.inputPath, "utf-8"),
 		passed: async () => true,
-		failed: async (inputPath: optionCallbacksFile["inputPath"]) =>
-			`Error: Cannot process file ${inputPath} !`,
-		accomplished: async (
-			inputPath: optionCallbacksFile["inputPath"],
-			outputPath: optionCallbacksFile["outputPath"],
-			_fileSizeBefore: optionCallbacksFile["fileSizeBefore"],
-			_fileSizeAfter: optionCallbacksFile["fileSizeAfter"]
-		) => `Processed ${inputPath} in ${outputPath}.`,
-		fulfilled: async (pipe: optionCallbacksPipe) =>
+		failed: async (inputPath) => `Error: Cannot process file ${inputPath}!`,
+		accomplished: async (current) =>
+			`Processed ${current.inputPath} in ${current.outputPath}.`,
+		fulfilled: async (pipe) =>
 			`Successfully processed a total of ${pipe.files} ${
 				pipe.files === 1 ? "file" : "files"
 			}.`,
@@ -81,16 +73,14 @@ import * as fs from "fs";
 await (
 	await (await new files().in("./input/")).by("**/*.md")
 ).apply({
-	wrote: async (_file, data) => data,
-	read: async (file) => await fs.promises.readFile(file, "utf-8"),
+	wrote: async (current) => current.buffer,
+	read: async (current) =>
+		await fs.promises.readFile(current.inputPath, "utf-8"),
 	passed: async () => true,
-	failed: async (inputPath) => `Error: Cannot process file ${inputPath}!`,
-	accomplished: async (
-		inputPath,
-		outputPath,
-		_fileSizeBefore,
-		_fileSizeAfter
-	) => `Processed ${inputPath} in ${outputPath}.`,
+	failed: async (current) =>
+		`Error: Cannot process file ${current.inputPath}!`,
+	accomplished: async (current) =>
+		`Processed ${current.inputPath} in ${current.outputPath}.`,
 	fulfilled: async (pipe) =>
 		`Successfully processed a total of ${pipe.files} ${
 			pipe.files === 1 ? "file" : "files"
