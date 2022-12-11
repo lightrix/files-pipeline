@@ -13,6 +13,7 @@ import type {
 } from "../options/index.js";
 
 import applyTo from "./apply-to.js";
+import deepmerge from "./deepmerge.js";
 
 export default class {
 	paths: Map<string, string> = new Map();
@@ -28,6 +29,7 @@ export default class {
 			outputPath: "",
 			fileSizeAfter: 0,
 			fileSizeBefore: 0,
+			buffer: "",
 		},
 	};
 
@@ -110,53 +112,59 @@ export default class {
 	}
 
 	async apply(callbacks: functionCallbacks = defaultOptions.pipeline) {
+		callbacks = deepmerge(defaultOptions.pipeline, callbacks);
+
 		for (const [outputPath, inputPath] of this.results) {
 			try {
-				const fileSizeBefore = (await fs.promises.stat(inputPath)).size;
+				this.pipe.current.inputPath = inputPath;
+				this.pipe.current.outputPath = outputPath;
+
+				this.pipe.current.fileSizeBefore = (
+					await fs.promises.stat(this.pipe.current.inputPath)
+				).size;
 
 				if (callbacks.read && callbacks.wrote) {
-					const writeBuffer = await callbacks.wrote(
-						inputPath,
-						await callbacks.read(inputPath)
+					this.pipe.current.buffer = await callbacks.read(
+						this.pipe.current
 					);
 
-					if (!writeBuffer) {
+					const buffer = await callbacks.wrote(this.pipe.current);
+
+					if (!buffer) {
 						return;
 					}
 
+					this.pipe.current.buffer = buffer;
+
 					if (
 						callbacks.passed &&
-						(await callbacks.passed(fileSizeBefore, writeBuffer))
+						(await callbacks.passed(this.pipe.current))
 					) {
 						try {
 							await fs.promises.access(
-								dirname(outputPath),
+								dirname(this.pipe.current.outputPath),
 								fs.constants.W_OK
 							);
 						} catch (_error) {
-							await fs.promises.mkdir(dirname(outputPath), {
-								recursive: true,
-							});
+							await fs.promises.mkdir(
+								dirname(this.pipe.current.outputPath),
+								{
+									recursive: true,
+								}
+							);
 						}
 
 						await fs.promises.writeFile(
-							outputPath,
-							writeBuffer,
+							this.pipe.current.outputPath,
+							this.pipe.current.buffer,
 							"utf-8"
 						);
 
-						const fileSizeAfter = (
-							await fs.promises.stat(outputPath)
+						this.pipe.current.fileSizeAfter = (
+							await fs.promises.stat(this.pipe.current.outputPath)
 						).size;
 
 						if (this.pipe.debug > 0) {
-							this.pipe.current = {
-								inputPath,
-								outputPath,
-								fileSizeBefore,
-								fileSizeAfter,
-							};
-
 							this.pipe.files++;
 
 							if (callbacks.changed) {
@@ -168,10 +176,7 @@ export default class {
 							if (typeof callbacks.accomplished === "function") {
 								console.log(
 									await callbacks.accomplished(
-										inputPath,
-										outputPath,
-										fileSizeBefore,
-										fileSizeAfter
+										this.pipe.current
 									)
 								);
 							}

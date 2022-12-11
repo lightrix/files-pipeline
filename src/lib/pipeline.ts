@@ -1,6 +1,9 @@
 import { fileURLToPath } from "url";
 
-import defaultOptions, { optionCallbacksPipe } from "../options/index.js";
+import defaultOptions, {
+	functionCallbacks,
+	optionCallbacksPipe,
+} from "../options/index.js";
 import type { Options, optionPath } from "../options/index.js";
 
 import applyTo from "./apply-to.js";
@@ -14,6 +17,7 @@ import { minify as htmlMinifierTerser } from "html-minifier-terser";
 import sharp from "sharp";
 import { optimize as svgo } from "svgo";
 import { minify as terser } from "terser";
+import type { Output } from "svgo";
 
 import type { Options as CompressOptions } from "./../options/lib/compress/index.js";
 
@@ -99,10 +103,9 @@ export default class {
 							.not(this.options.exclude)
 							.apply(
 								deepmerge(defaultCompressOptions.pipeline, {
-									wrote: async (
-										_file: string,
-										data: string
-									) => csso(data, setting).css,
+									wrote: async (current) =>
+										csso(current.buffer.toString(), setting)
+											.css,
 									fulfilled: async (
 										pipe: optionCallbacksPipe
 									) =>
@@ -113,7 +116,7 @@ export default class {
 										} for ${await formatBytes(
 											pipe.info.total
 										)}.`,
-								})
+								} satisfies functionCallbacks)
 							);
 
 						break;
@@ -128,11 +131,11 @@ export default class {
 							.not(this.options.exclude)
 							.apply(
 								deepmerge(defaultCompressOptions.pipeline, {
-									wrote: async (
-										_file: string,
-										data: string
-									) =>
-										await htmlMinifierTerser(data, setting),
+									wrote: async (current) =>
+										await htmlMinifierTerser(
+											current.buffer.toString(),
+											setting
+										),
 									fulfilled: async (
 										pipe: optionCallbacksPipe
 									) =>
@@ -143,7 +146,7 @@ export default class {
 										} for ${await formatBytes(
 											pipe.info.total
 										)}.`,
-								})
+								} satisfies functionCallbacks)
 							);
 						break;
 					}
@@ -157,10 +160,14 @@ export default class {
 							.not(this.options.exclude)
 							.apply(
 								deepmerge(defaultCompressOptions.pipeline, {
-									wrote: async (
-										_file: string,
-										data: string
-									) => (await terser(data, setting)).code,
+									wrote: async (current) => {
+										const { code } = await terser(
+											current.buffer.toString(),
+											setting
+										);
+
+										return code ? code : current.buffer;
+									},
 									fulfilled: async (
 										pipe: optionCallbacksPipe
 									) =>
@@ -171,7 +178,7 @@ export default class {
 										} for ${await formatBytes(
 											pipe.info.total
 										)}.`,
-								})
+								} satisfies functionCallbacks)
 							);
 						break;
 					}
@@ -187,11 +194,13 @@ export default class {
 							.not(this.options.exclude)
 							.apply(
 								deepmerge(defaultCompressOptions.pipeline, {
-									// rome-ignore lint:
-									wrote: async (_file: string, data: any) =>
-										await sharpRead(data, setting),
-									read: async (file: string) =>
-										sharp(file, {
+									wrote: async (current) =>
+										await sharpRead(
+											current.buffer,
+											setting
+										),
+									read: async (current) =>
+										sharp(current.inputPath, {
 											failOn: "none",
 											sequentialRead: true,
 											unlimited: true,
@@ -206,7 +215,7 @@ export default class {
 										} for ${await formatBytes(
 											pipe.info.total
 										)}.`,
-								})
+								} satisfies functionCallbacks)
 							);
 						break;
 					}
@@ -220,28 +229,17 @@ export default class {
 							.not(this.options.exclude)
 							.apply(
 								deepmerge(defaultCompressOptions.pipeline, {
-									wrote: async (
-										_file: string,
-										data: string
-									) => {
-										const result = svgo(data, setting) as {
-											// rome-ignore lint:
-											[key: string]: any;
-										};
+									wrote: async (current) => {
+										const { data } = svgo(
+											current.buffer.toString(),
+											setting
+										) as Output;
 
-										if (
-											typeof result["error"] !==
-											"undefined"
-										) {
-											console.error(result["error"]);
+										if (typeof data !== "undefined") {
+											return data;
 										}
 
-										if (
-											typeof result["data"] !==
-											"undefined"
-										) {
-											return result["data"];
-										}
+										return current.buffer;
 									},
 									fulfilled: async (
 										pipe: optionCallbacksPipe
@@ -253,7 +251,7 @@ export default class {
 										} for ${await formatBytes(
 											pipe.info.total
 										)}.`,
-								})
+								} satisfies functionCallbacks)
 							);
 						break;
 					}
@@ -304,9 +302,9 @@ export default class {
 				.not(this.options.exclude)
 				.apply(
 					deepmerge(defaultCrittersOptions.pipeline, {
-						wrote: (_file: string, data: string) =>
-							critters.process(data),
-					})
+						wrote: async (current) =>
+							critters.process(current.buffer),
+					} satisfies functionCallbacks)
 				);
 		}
 

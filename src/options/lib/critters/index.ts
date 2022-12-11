@@ -1,6 +1,6 @@
 import deepmerge from "../../../lib/deepmerge.js";
 
-import type { Options as OptionsBase } from "../../index.js";
+import type { functionCallbacks, Options as OptionsBase } from "../../index.js";
 
 // @ts-ignore
 import type { Options as CrittersOptions } from "critters";
@@ -30,5 +30,5 @@ export default {
 				pipe.files === 1 ? "file" : "files"
 			}.`,
 		accomplished: false,
-	}),
+	} satisfies functionCallbacks),
 } satisfies Options;

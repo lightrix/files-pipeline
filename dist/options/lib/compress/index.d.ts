@@ -1,7 +1,3 @@
-/// <reference types="node" resolution-mode="require"/>
-/// <reference types="node" resolution-mode="require"/>
-/// <reference types="node" resolution-mode="require"/>
-/// <reference types="node" resolution-mode="require"/>
 import type { Options as OptionsBase } from "../../index.js";
 import type { optionCallbacksFile, optionCallbacksPipe } from "../../index.js";
 import type CSS from "./css.js";
@@ -95,11 +91,11 @@ declare const _default: {
         plugins: "preset-default"[];
     };
     pipeline: {
-        wrote: (_file: string, data: string) => Promise<string>;
-        read: (file: string) => Promise<string>;
-        passed: (fileSizeBefore: optionCallbacksFile["fileSizeBefore"], writeBuffer: string | NodeJS.ArrayBufferView | ArrayBuffer | SharedArrayBuffer) => Promise<boolean>;
+        wrote: (current: optionCallbacksFile) => Promise<import("../../index.js").optionBuffer>;
+        read: (current: optionCallbacksFile) => Promise<string>;
+        passed: (current: optionCallbacksFile) => Promise<boolean>;
         failed: (inputPath: optionCallbacksFile["inputPath"]) => Promise<string>;
-        accomplished: (inputPath: optionCallbacksFile["inputPath"], outputPath: optionCallbacksFile["outputPath"], fileSizeBefore: optionCallbacksFile["fileSizeBefore"], fileSizeAfter: optionCallbacksFile["fileSizeAfter"]) => Promise<string>;
+        accomplished: (current: optionCallbacksFile) => Promise<string>;
         fulfilled: (pipe: optionCallbacksPipe) => Promise<string>;
         changed: (pipe: optionCallbacksPipe) => Promise<optionCallbacksPipe>;
     };

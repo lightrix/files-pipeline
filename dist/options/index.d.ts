@@ -1,15 +1,18 @@
 /// <reference types="node" resolution-mode="require"/>
 /// <reference types="node" resolution-mode="require"/>
+/// <reference types="node" resolution-mode="require"/>
+import type { Stream } from "stream";
 import type { Pattern } from "fast-glob";
 export type optionDebug = 0 | 1 | 2;
+export type optionBuffer = string | NodeJS.ArrayBufferView | Iterable<string | NodeJS.ArrayBufferView> | AsyncIterable<string | NodeJS.ArrayBufferView> | Stream;
 export interface functionCallbacks {
     fulfilled?: boolean | ((pipe: optionCallbacksPipe) => Promise<string>);
     failed?: boolean | ((inputPath: optionCallbacksFile["inputPath"]) => Promise<string>);
-    accomplished?: boolean | ((inputPath: optionCallbacksFile["inputPath"], outputPath: optionCallbacksFile["outputPath"], fileSizeBefore: optionCallbacksFile["fileSizeBefore"], fileSizeAfter: optionCallbacksFile["fileSizeAfter"]) => Promise<string>);
+    accomplished?: boolean | ((current: optionCallbacksFile) => Promise<string>);
     changed?: (pipe: optionCallbacksPipe) => Promise<optionCallbacksPipe>;
-    passed?: (fileSizeBefore: optionCallbacksFile["fileSizeBefore"], writeBuffer: string | NodeJS.ArrayBufferView | ArrayBuffer | SharedArrayBuffer) => Promise<boolean>;
-    read?: (file: string) => Promise<any>;
-    wrote?: (file: string, data: string) => Promise<any>;
+    passed?: (current: optionCallbacksFile) => Promise<boolean>;
+    read?: (current: optionCallbacksFile) => Promise<optionBuffer>;
+    wrote?: (current: optionCallbacksFile) => Promise<optionBuffer>;
 }
 export type optionExclude = string | RegExp | ((file: string) => boolean);
 export type optionPath = string | URL | Map<string | URL, string | URL> | false;
@@ -33,16 +36,17 @@ export interface optionCallbacksFile {
     outputPath: string;
     fileSizeAfter: number;
     fileSizeBefore: number;
+    buffer: optionBuffer;
 }
 declare const _default: {
     path: string;
     logger: 2;
     pipeline: {
-        wrote: (_file: string, data: string) => Promise<string>;
-        read: (file: string) => Promise<string>;
+        wrote: (current: optionCallbacksFile) => Promise<optionBuffer>;
+        read: (current: optionCallbacksFile) => Promise<string>;
         passed: () => Promise<true>;
         failed: (inputPath: string) => Promise<string>;
-        accomplished: (inputPath: string, outputPath: string, _fileSizeBefore: number, _fileSizeAfter: number) => Promise<string>;
+        accomplished: (current: optionCallbacksFile) => Promise<string>;
         fulfilled: (pipe: optionCallbacksPipe) => Promise<string>;
         changed: (pipe: optionCallbacksPipe) => Promise<optionCallbacksPipe>;
     };

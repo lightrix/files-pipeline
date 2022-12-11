@@ -1,7 +1,7 @@
 import formatBytes from "../../../lib/format-bytes.js";
 import deepmerge from "../../../lib/deepmerge.js";
 
-import type { Options as OptionsBase } from "../../index.js";
+import type { functionCallbacks, Options as OptionsBase } from "../../index.js";
 
 import defaultOptions from "../../index.js";
 import type { optionCallbacksFile, optionCallbacksPipe } from "../../index.js";
@@ -107,31 +107,22 @@ export default {
 	pipeline: deepmerge(defaultOptions.pipeline, {
 		failed: async (inputPath: optionCallbacksFile["inputPath"]) =>
 			`Error: Cannot compress file ${inputPath}!`,
-		passed: async (
-			fileSizeBefore: optionCallbacksFile["fileSizeBefore"],
-			writeBuffer:
-				| string
-				| NodeJS.ArrayBufferView
-				| ArrayBuffer
-				| SharedArrayBuffer
-		) => fileSizeBefore > Buffer.byteLength(writeBuffer),
-		accomplished: async (
-			inputPath: optionCallbacksFile["inputPath"],
-			outputPath: optionCallbacksFile["outputPath"],
-			fileSizeBefore: optionCallbacksFile["fileSizeBefore"],
-			fileSizeAfter: optionCallbacksFile["fileSizeAfter"]
-		) =>
-			`Compressed ${inputPath} for ${await formatBytes(
-				fileSizeBefore - fileSizeAfter
+		passed: async (current: optionCallbacksFile) =>
+			current.fileSizeBefore >
+			Buffer.byteLength(current.buffer.toString()),
+		accomplished: async (current: optionCallbacksFile) =>
+			`Compressed ${current.inputPath} for ${await formatBytes(
+				current.fileSizeBefore - current.fileSizeAfter
 			)} (${(
-				((fileSizeBefore - fileSizeAfter) / fileSizeBefore) *
+				((current.fileSizeBefore - current.fileSizeAfter) /
+					current.fileSizeBefore) *
 				100
-			).toFixed(2)}% reduction) in ${outputPath}.`,
+			).toFixed(2)}% reduction) in ${current.outputPath}.`,
 		changed: async (pipe: optionCallbacksPipe) => {
 			pipe.info.total =
 				(pipe.info.total ? pipe.info.total : 0) +
 				(pipe.current.fileSizeBefore - pipe.current.fileSizeAfter);
 			return pipe;
 		},
-	}),
+	} satisfies functionCallbacks),
 } satisfies Options;

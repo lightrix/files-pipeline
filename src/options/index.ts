@@ -1,7 +1,15 @@
 import * as fs from "fs";
+import type { Stream } from "stream";
 import type { Pattern } from "fast-glob";
 
 export type optionDebug = 0 | 1 | 2;
+
+export type optionBuffer =
+	| string
+	| NodeJS.ArrayBufferView
+	| Iterable<string | NodeJS.ArrayBufferView>
+	| AsyncIterable<string | NodeJS.ArrayBufferView>
+	| Stream;
 
 export interface functionCallbacks {
 	fulfilled?: boolean | ((pipe: optionCallbacksPipe) => Promise<string>);
@@ -10,25 +18,13 @@ export interface functionCallbacks {
 		| ((inputPath: optionCallbacksFile["inputPath"]) => Promise<string>);
 	accomplished?:
 		| boolean
-		| ((
-				inputPath: optionCallbacksFile["inputPath"],
-				outputPath: optionCallbacksFile["outputPath"],
-				fileSizeBefore: optionCallbacksFile["fileSizeBefore"],
-				fileSizeAfter: optionCallbacksFile["fileSizeAfter"]
-		  ) => Promise<string>);
+		| ((current: optionCallbacksFile) => Promise<string>);
 	changed?: (pipe: optionCallbacksPipe) => Promise<optionCallbacksPipe>;
-	passed?: (
-		fileSizeBefore: optionCallbacksFile["fileSizeBefore"],
-		writeBuffer:
-			| string
-			| NodeJS.ArrayBufferView
-			| ArrayBuffer
-			| SharedArrayBuffer
-	) => Promise<boolean>;
+	passed?: (current: optionCallbacksFile) => Promise<boolean>;
 	// rome-ignore lint:
-	read?: (file: string) => Promise<any>;
+	read?: (current: optionCallbacksFile) => Promise<optionBuffer>;
 	// rome-ignore lint:
-	wrote?: (file: string, data: string) => Promise<any>;
+	wrote?: (current: optionCallbacksFile) => Promise<optionBuffer>;
 }
 
 export type optionExclude = string | RegExp | ((file: string) => boolean);
@@ -56,7 +52,6 @@ export interface optionCallbacksPipe {
 	debug: optionDebug;
 	files: number;
 	current: optionCallbacksFile;
-	// rome-ignore lint:
 	info: any;
 }
 
@@ -65,22 +60,20 @@ export interface optionCallbacksFile {
 	outputPath: string;
 	fileSizeAfter: number;
 	fileSizeBefore: number;
+	buffer: optionBuffer;
 }
 
 export default {
 	path: "./dist/",
 	logger: 2,
 	pipeline: {
-		wrote: async (_file, data) => data,
-		read: async (file) => await fs.promises.readFile(file, "utf-8"),
+		wrote: async (current) => current.buffer,
+		read: async (current) =>
+			await fs.promises.readFile(current.inputPath, "utf-8"),
 		passed: async () => true,
 		failed: async (inputPath) => `Error: Cannot process file ${inputPath}!`,
-		accomplished: async (
-			inputPath,
-			outputPath,
-			_fileSizeBefore,
-			_fileSizeAfter
-		) => `Processed ${inputPath} in ${outputPath}.`,
+		accomplished: async (current) =>
+			`Processed ${current.inputPath} in ${current.outputPath}.`,
 		fulfilled: async (pipe) =>
 			`Successfully processed a total of ${pipe.files} ${
 				pipe.files === 1 ? "file" : "files"

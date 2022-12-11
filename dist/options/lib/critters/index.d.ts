@@ -13,11 +13,11 @@ declare const _default: {
         pruneSource: boolean;
     };
     pipeline: {
-        wrote: (_file: string, data: string) => Promise<string>;
-        read: (file: string) => Promise<string>;
+        wrote: (current: import("../../index.js").optionCallbacksFile) => Promise<import("../../index.js").optionBuffer>;
+        read: (current: import("../../index.js").optionCallbacksFile) => Promise<string>;
         passed: () => Promise<true>;
         failed: (inputPath: string) => Promise<string>;
-        accomplished: boolean;
+        accomplished: false;
         fulfilled: (pipe: optionCallbacksPipe) => Promise<string>;
         changed: (pipe: optionCallbacksPipe) => Promise<optionCallbacksPipe>;
     };
