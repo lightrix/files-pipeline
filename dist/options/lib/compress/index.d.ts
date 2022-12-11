@@ -2,8 +2,6 @@
 /// <reference types="node" resolution-mode="require"/>
 /// <reference types="node" resolution-mode="require"/>
 /// <reference types="node" resolution-mode="require"/>
-/// <reference types="node" resolution-mode="require"/>
-/// <reference types="node" resolution-mode="require"/>
 import type { Options as OptionsBase } from "../../index.js";
 import type { optionCallbacksFile, optionCallbacksPipe } from "../../index.js";
 import type CSS from "./css.js";
@@ -98,7 +96,7 @@ declare const _default: {
     };
     pipeline: {
         wrote: (_file: string, data: string) => Promise<string>;
-        read: (file: import("fs").PathLike | import("fs/promises").FileHandle) => Promise<string>;
+        read: (file: string) => Promise<string>;
         passed: (fileSizeBefore: optionCallbacksFile["fileSizeBefore"], writeBuffer: string | NodeJS.ArrayBufferView | ArrayBuffer | SharedArrayBuffer) => Promise<boolean>;
         failed: (inputPath: optionCallbacksFile["inputPath"]) => Promise<string>;
         accomplished: (inputPath: optionCallbacksFile["inputPath"], outputPath: optionCallbacksFile["outputPath"], fileSizeBefore: optionCallbacksFile["fileSizeBefore"], fileSizeAfter: optionCallbacksFile["fileSizeAfter"]) => Promise<string>;

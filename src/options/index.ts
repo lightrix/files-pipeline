@@ -47,7 +47,7 @@ export interface functionCallbacks {
 	// rome-ignore lint:
 	read?: (file: string) => Promise<any>;
 	// rome-ignore lint:
-	wrote?: (data: string, file: string) => Promise<any>;
+	wrote?: (file: string, data: string) => Promise<any>;
 }
 
 export interface Options {
@@ -71,19 +71,17 @@ export default {
 	path: "./dist/",
 	logger: 2,
 	pipeline: {
-		wrote: async (_file: string, data: string) => data,
-		read: async (file: fs.PathLike | fs.promises.FileHandle) =>
-			await fs.promises.readFile(file, "utf-8"),
+		wrote: async (_file, data) => data,
+		read: async (file) => await fs.promises.readFile(file, "utf-8"),
 		passed: async () => true,
-		failed: async (inputPath: optionCallbacksFile["inputPath"]) =>
-			`Error: Cannot process file ${inputPath}!`,
+		failed: async (inputPath) => `Error: Cannot process file ${inputPath}!`,
 		accomplished: async (
-			inputPath: optionCallbacksFile["inputPath"],
-			outputPath: optionCallbacksFile["outputPath"],
-			_fileSizeBefore: optionCallbacksFile["fileSizeBefore"],
-			_fileSizeAfter: optionCallbacksFile["fileSizeAfter"]
+			inputPath,
+			outputPath,
+			_fileSizeBefore,
+			_fileSizeAfter
 		) => `Processed ${inputPath} in ${outputPath}.`,
-		fulfilled: async (pipe: optionCallbacksPipe) =>
+		fulfilled: async (pipe) =>
 			`Successfully processed a total of ${pipe.files} ${
 				pipe.files === 1 ? "file" : "files"
 			}.`,

@@ -72,6 +72,33 @@ await new pipeline({
 });
 ```
 
+or you can query the files object directly:
+
+```ts
+import { files } from "@nikolarhristov/pipeline";
+import * as fs from "fs";
+
+await (
+	await (await new files().in("./input/")).by("**/*.md")
+).apply({
+	wrote: async (_file, data) => data,
+	read: async (file) => await fs.promises.readFile(file, "utf-8"),
+	passed: async () => true,
+	failed: async (inputPath) => `Error: Cannot process file ${inputPath}!`,
+	accomplished: async (
+		inputPath,
+		outputPath,
+		_fileSizeBefore,
+		_fileSizeAfter
+	) => `Processed ${inputPath} in ${outputPath}.`,
+	fulfilled: async (pipe) =>
+		`Successfully processed a total of ${pipe.files} ${
+			pipe.files === 1 ? "file" : "files"
+		}.`,
+	changed: async (pipe) => pipe,
+});
+```
+
 The pipeline has built in methods which you can use to compress your CSS, HTML
 and JavaScript or inline the critical CSS in the HTML files in that directory.
 

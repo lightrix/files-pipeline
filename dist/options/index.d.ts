@@ -1,6 +1,5 @@
 /// <reference types="node" resolution-mode="require"/>
 /// <reference types="node" resolution-mode="require"/>
-import * as fs from "fs";
 import type { Pattern } from "fast-glob";
 export type optionDebug = 0 | 1 | 2;
 export type optionPath = string | URL | Map<string | URL, string | URL> | false;
@@ -24,7 +23,7 @@ export interface functionCallbacks {
     changed?: (pipe: optionCallbacksPipe) => Promise<optionCallbacksPipe>;
     passed?: (fileSizeBefore: optionCallbacksFile["fileSizeBefore"], writeBuffer: string | NodeJS.ArrayBufferView | ArrayBuffer | SharedArrayBuffer) => Promise<boolean>;
     read?: (file: string) => Promise<any>;
-    wrote?: (data: string, file: string) => Promise<any>;
+    wrote?: (file: string, data: string) => Promise<any>;
 }
 export interface Options {
     [key: string]: any;
@@ -40,10 +39,10 @@ declare const _default: {
     logger: 2;
     pipeline: {
         wrote: (_file: string, data: string) => Promise<string>;
-        read: (file: fs.PathLike | fs.promises.FileHandle) => Promise<string>;
+        read: (file: string) => Promise<string>;
         passed: () => Promise<true>;
-        failed: (inputPath: optionCallbacksFile["inputPath"]) => Promise<string>;
-        accomplished: (inputPath: optionCallbacksFile["inputPath"], outputPath: optionCallbacksFile["outputPath"], _fileSizeBefore: optionCallbacksFile["fileSizeBefore"], _fileSizeAfter: optionCallbacksFile["fileSizeAfter"]) => Promise<string>;
+        failed: (inputPath: string) => Promise<string>;
+        accomplished: (inputPath: string, outputPath: string, _fileSizeBefore: number, _fileSizeAfter: number) => Promise<string>;
         fulfilled: (pipe: optionCallbacksPipe) => Promise<string>;
         changed: (pipe: optionCallbacksPipe) => Promise<optionCallbacksPipe>;
     };
