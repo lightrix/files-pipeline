@@ -19,9 +19,9 @@ import { optimize as svgo } from "svgo";
 import { minify as terser } from "terser";
 import type { Output } from "svgo";
 
-import type { Options as CompressOptions } from "./../options/lib/compress/index.js";
+import type { Options as CompressOptions } from "../options/lib/compress/index.js";
 
-import defaultCompressOptions from "./../options/lib/compress/index.js";
+import defaultCompressOptions from "../options/lib/compress/index.js";
 
 import sharpRead from "./vendor/sharp-read.js";
 
