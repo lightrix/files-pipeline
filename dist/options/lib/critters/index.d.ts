@@ -18,7 +18,7 @@ declare const _default: {
         passed: () => Promise<true>;
         failed: (inputPath: string) => Promise<string>;
         accomplished: false;
-        fulfilled: (pipe: optionCallbacksPipe) => Promise<string>;
+        fulfilled: (pipe: optionCallbacksPipe) => Promise<string | false>;
         changed: (pipe: optionCallbacksPipe) => Promise<optionCallbacksPipe>;
     };
 };

@@ -12,7 +12,9 @@ export type optionBuffer =
 	| Stream;
 
 export interface functionCallbacks {
-	fulfilled?: boolean | ((pipe: optionCallbacksPipe) => Promise<string>);
+	fulfilled?:
+		| boolean
+		| ((pipe: optionCallbacksPipe) => Promise<string | false>);
 
 	failed?:
 		| boolean
@@ -84,9 +86,11 @@ export default {
 		accomplished: async (current) =>
 			`Processed ${current.inputPath} in ${current.outputPath}.`,
 		fulfilled: async (pipe) =>
-			`Successfully processed a total of ${pipe.files} ${
-				pipe.files === 1 ? "file" : "files"
-			}.`,
+			pipe.files > 0
+				? `Successfully processed a total of ${pipe.files} ${
+						pipe.files === 1 ? "file" : "files"
+				  }.`
+				: false,
 		changed: async (pipe) => pipe,
 	},
 } satisfies Options;

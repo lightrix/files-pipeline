@@ -109,13 +109,18 @@ export default class {
 									fulfilled: async (
 										pipe: optionCallbacksPipe
 									) =>
-										`Successfully compressed a total of ${
-											pipe.files
-										} CSS ${
-											pipe.files === 1 ? "file" : "files"
-										} for ${await formatBytes(
-											pipe.info.total
-										)}.`,
+										pipe.files > 0
+											? `Successfully compressed a total of ${
+													pipe.files
+											  } CSS ${
+													// rome-ignore lint/nursery/noPrecisionLoss:
+													pipe.files === 1
+														? "file"
+														: "files"
+											  } for ${await formatBytes(
+													pipe.info.total
+											  )}.`
+											: false,
 								} satisfies functionCallbacks)
 							);
 
@@ -139,13 +144,18 @@ export default class {
 									fulfilled: async (
 										pipe: optionCallbacksPipe
 									) =>
-										`Successfully compressed a total of ${
-											pipe.files
-										} HTML ${
-											pipe.files === 1 ? "file" : "files"
-										} for ${await formatBytes(
-											pipe.info.total
-										)}.`,
+										pipe.files > 0
+											? `Successfully compressed a total of ${
+													pipe.files
+											  } HTML ${
+													// rome-ignore lint/nursery/noPrecisionLoss:
+													pipe.files === 1
+														? "file"
+														: "files"
+											  } for ${await formatBytes(
+													pipe.info.total
+											  )}.`
+											: false,
 								} satisfies functionCallbacks)
 							);
 						break;
@@ -171,13 +181,18 @@ export default class {
 									fulfilled: async (
 										pipe: optionCallbacksPipe
 									) =>
-										`Successfully compressed a total of ${
-											pipe.files
-										} JS ${
-											pipe.files === 1 ? "file" : "files"
-										} for ${await formatBytes(
-											pipe.info.total
-										)}.`,
+										pipe.files > 0
+											? `Successfully compressed a total of ${
+													pipe.files
+											  } JS ${
+													// rome-ignore lint/nursery/noPrecisionLoss:
+													pipe.files === 1
+														? "file"
+														: "files"
+											  } for ${await formatBytes(
+													pipe.info.total
+											  )}.`
+											: false,
 								} satisfies functionCallbacks)
 							);
 						break;
@@ -208,13 +223,18 @@ export default class {
 									fulfilled: async (
 										pipe: optionCallbacksPipe
 									) =>
-										`Successfully compressed a total of ${
-											pipe.files
-										} IMG ${
-											pipe.files === 1 ? "file" : "files"
-										} for ${await formatBytes(
-											pipe.info.total
-										)}.`,
+										pipe.files > 0
+											? `Successfully compressed a total of ${
+													pipe.files
+											  } IMG ${
+													// rome-ignore lint/nursery/noPrecisionLoss:
+													pipe.files === 1
+														? "file"
+														: "files"
+											  } for ${await formatBytes(
+													pipe.info.total
+											  )}.`
+											: false,
 								} satisfies functionCallbacks)
 							);
 						break;
@@ -244,13 +264,18 @@ export default class {
 									fulfilled: async (
 										pipe: optionCallbacksPipe
 									) =>
-										`Successfully compressed a total of ${
-											pipe.files
-										} SVG ${
-											pipe.files === 1 ? "file" : "files"
-										} for ${await formatBytes(
-											pipe.info.total
-										)}.`,
+										pipe.files > 0
+											? `Successfully compressed a total of ${
+													pipe.files
+											  } SVG ${
+													// rome-ignore lint/nursery/noPrecisionLoss:
+													pipe.files === 1
+														? "file"
+														: "files"
+											  } for ${await formatBytes(
+													pipe.info.total
+											  )}.`
+											: false,
 								} satisfies functionCallbacks)
 							);
 						break;

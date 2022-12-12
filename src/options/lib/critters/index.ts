@@ -26,9 +26,11 @@ export default {
 		failed: async (inputPath: string) =>
 			`Error: Cannot inline file ${inputPath}!`,
 		fulfilled: async (pipe: optionCallbacksPipe) =>
-			`Successfully inlined a total of ${pipe.files} HTML ${
-				pipe.files === 1 ? "file" : "files"
-			}.`,
+			pipe.files > 0
+				? `Successfully inlined a total of ${pipe.files} HTML ${
+						pipe.files === 1 ? "file" : "files"
+				  }.`
+				: false,
 		accomplished: false,
 	} satisfies functionCallbacks),
 } satisfies Options;

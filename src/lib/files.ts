@@ -95,7 +95,7 @@ export default class {
 		for (const filter of filters) {
 			if (typeof filter === "string") {
 				for (const file of this.results) {
-	// rome-ignore lint/nursery/noPrecisionLoss:
+					// rome-ignore lint/nursery/noPrecisionLoss:
 					if (file[0].match(filter) || file[1].match(filter)) {
 						this.results.delete(file[0]);
 					}
@@ -104,7 +104,7 @@ export default class {
 
 			if (typeof filter === "function") {
 				for (const file of this.results) {
-	// rome-ignore lint/nursery/noPrecisionLoss:
+					// rome-ignore lint/nursery/noPrecisionLoss:
 					if (filter(file[0]) || filter(file[1])) {
 						this.results.delete(file[0]);
 					}
@@ -176,14 +176,16 @@ export default class {
 							}
 						}
 
-	// rome-ignore lint/nursery/noPrecisionLoss:
+						// rome-ignore lint/nursery/noPrecisionLoss:
 						if (this.pipe.debug > 1) {
 							if (typeof callbacks.accomplished === "function") {
-								console.log(
-									await callbacks.accomplished(
-										this.pipe.current
-									)
+								const message = await callbacks.accomplished(
+									this.pipe.current
 								);
+
+								if (message.length > 0 || !message) {
+									console.log(message);
+								}
 							}
 						}
 					}
@@ -192,7 +194,11 @@ export default class {
 				this.results.delete(outputPath);
 
 				if (typeof callbacks.failed === "function") {
-					console.log(await callbacks.failed(inputPath));
+					const message = await callbacks.failed(inputPath);
+
+					if (message.length > 0 || !message) {
+						console.log(message);
+					}
 				}
 			}
 		}

@@ -6,7 +6,7 @@ import type { Pattern } from "fast-glob";
 export type optionDebug = 0 | 1 | 2;
 export type optionBuffer = string | NodeJS.ArrayBufferView | Iterable<string | NodeJS.ArrayBufferView> | AsyncIterable<string | NodeJS.ArrayBufferView> | Stream;
 export interface functionCallbacks {
-    fulfilled?: boolean | ((pipe: optionCallbacksPipe) => Promise<string>);
+    fulfilled?: boolean | ((pipe: optionCallbacksPipe) => Promise<string | false>);
     failed?: boolean | ((inputPath: optionCallbacksFile["inputPath"]) => Promise<string>);
     accomplished?: boolean | ((current: optionCallbacksFile) => Promise<string>);
     changed?: (pipe: optionCallbacksPipe) => Promise<optionCallbacksPipe>;
@@ -47,7 +47,7 @@ declare const _default: {
         passed: () => Promise<true>;
         failed: (inputPath: string) => Promise<string>;
         accomplished: (current: optionCallbacksFile) => Promise<string>;
-        fulfilled: (pipe: optionCallbacksPipe) => Promise<string>;
+        fulfilled: (pipe: optionCallbacksPipe) => Promise<string | false>;
         changed: (pipe: optionCallbacksPipe) => Promise<optionCallbacksPipe>;
     };
 };
