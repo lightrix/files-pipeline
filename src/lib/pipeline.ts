@@ -283,8 +283,10 @@ export default class {
 						switch (this.options.logger) {
 							case 0:
 								return "silent";
+							// rome-ignore lint/nursery/noPrecisionLoss:
 							case 1:
 								return "silent";
+							// rome-ignore lint/nursery/noPrecisionLoss:
 							case 2:
 								return "info";
 							default:

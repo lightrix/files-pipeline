@@ -22,6 +22,7 @@ export default class {
 
 	pipe: optionCallbacksPipe = {
 		files: 0,
+		// rome-ignore lint/nursery/noPrecisionLoss:
 		debug: 2,
 		info: {},
 		current: {
@@ -33,6 +34,7 @@ export default class {
 		},
 	};
 
+	// rome-ignore lint/nursery/noPrecisionLoss:
 	constructor(debug: optionCallbacksPipe["debug"] = 2) {
 		this.pipe.debug = debug;
 	}
@@ -93,6 +95,7 @@ export default class {
 		for (const filter of filters) {
 			if (typeof filter === "string") {
 				for (const file of this.results) {
+	// rome-ignore lint/nursery/noPrecisionLoss:
 					if (file[0].match(filter) || file[1].match(filter)) {
 						this.results.delete(file[0]);
 					}
@@ -101,6 +104,7 @@ export default class {
 
 			if (typeof filter === "function") {
 				for (const file of this.results) {
+	// rome-ignore lint/nursery/noPrecisionLoss:
 					if (filter(file[0]) || filter(file[1])) {
 						this.results.delete(file[0]);
 					}
@@ -172,6 +176,7 @@ export default class {
 							}
 						}
 
+	// rome-ignore lint/nursery/noPrecisionLoss:
 						if (this.pipe.debug > 1) {
 							if (typeof callbacks.accomplished === "function") {
 								console.log(

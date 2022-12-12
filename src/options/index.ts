@@ -13,17 +13,21 @@ export type optionBuffer =
 
 export interface functionCallbacks {
 	fulfilled?: boolean | ((pipe: optionCallbacksPipe) => Promise<string>);
+
 	failed?:
 		| boolean
 		| ((inputPath: optionCallbacksFile["inputPath"]) => Promise<string>);
+
 	accomplished?:
 		| boolean
 		| ((current: optionCallbacksFile) => Promise<string>);
+
 	changed?: (pipe: optionCallbacksPipe) => Promise<optionCallbacksPipe>;
+
 	passed?: (current: optionCallbacksFile) => Promise<boolean>;
-	// rome-ignore lint:
+
 	read?: (current: optionCallbacksFile) => Promise<optionBuffer>;
-	// rome-ignore lint:
+
 	wrote?: (current: optionCallbacksFile) => Promise<optionBuffer>;
 }
 
@@ -32,7 +36,7 @@ export type optionExclude = string | RegExp | ((file: string) => boolean);
 export type optionPath = string | URL | Map<string | URL, string | URL> | false;
 
 export interface Options {
-	// rome-ignore lint:
+	// rome-ignore lint/suspicious/noExplicitAny:
 	[key: string]: any;
 
 	path?: optionPath | optionPath[] | Set<optionPath>;
@@ -50,8 +54,12 @@ export interface Options {
 
 export interface optionCallbacksPipe {
 	debug: optionDebug;
+
 	files: number;
+
 	current: optionCallbacksFile;
+
+	// rome-ignore lint/suspicious/noExplicitAny:
 	info: any;
 }
 
@@ -65,6 +73,7 @@ export interface optionCallbacksFile {
 
 export default {
 	path: "./dist/",
+	// rome-ignore lint/nursery/noPrecisionLoss: <explanation>
 	logger: 2,
 	pipeline: {
 		wrote: async (current) => current.buffer,

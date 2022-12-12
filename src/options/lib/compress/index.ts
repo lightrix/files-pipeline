@@ -13,7 +13,7 @@ import type JS from "./js.js";
 import type SVG from "./svg.js";
 
 export interface Options extends OptionsBase {
-	// rome-ignore lint:
+	// rome-ignore lint/suspicious/noExplicitAny:
 	[key: string]: any;
 
 	css?: boolean | CSS;
@@ -60,6 +60,7 @@ export default {
 		quoteCharacter: '"',
 	},
 	js: {
+		// rome-ignore lint/nursery/noPrecisionLoss:
 		ecma: 5,
 		enclose: false,
 		keep_classnames: false,
@@ -72,9 +73,11 @@ export default {
 	img: {
 		avif: {
 			chromaSubsampling: "4:4:4",
+			// rome-ignore lint/nursery/noPrecisionLoss: <explanation>
 			effort: 9,
 		},
 		gif: {
+			// rome-ignore lint/nursery/noPrecisionLoss: <explanation>
 			effort: 10,
 		},
 		jpeg: {
@@ -85,6 +88,7 @@ export default {
 			optimiseScans: true,
 		},
 		png: {
+			// rome-ignore lint/nursery/noPrecisionLoss: <explanation>
 			compressionLevel: 9,
 			palette: true,
 		},
@@ -93,6 +97,7 @@ export default {
 			compression: "lzw",
 		},
 		webp: {
+			// rome-ignore lint/nursery/noPrecisionLoss: <explanation>
 			effort: 6,
 		},
 	},
@@ -117,7 +122,9 @@ export default {
 				((current.fileSizeBefore - current.fileSizeAfter) /
 					current.fileSizeBefore) *
 				100
-			).toFixed(2)}% reduction) in ${current.outputPath}.`,
+			)
+				// rome-ignore lint/nursery/noPrecisionLoss: <explanation>
+				.toFixed(2)}% reduction) in ${current.outputPath}.`,
 		changed: async (pipe: optionCallbacksPipe) => {
 			pipe.info.total =
 				(pipe.info.total ? pipe.info.total : 0) +

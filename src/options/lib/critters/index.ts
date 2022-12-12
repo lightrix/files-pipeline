@@ -9,7 +9,7 @@ import defaultOptions from "../../index.js";
 import type { optionCallbacksPipe } from "../../index.js";
 
 export interface Options extends OptionsBase {
-	// rome-ignore lint:
+	// rome-ignore lint/suspicious/noExplicitAny:
 	[key: string]: any;
 
 	critters?: boolean | CrittersOptions;
