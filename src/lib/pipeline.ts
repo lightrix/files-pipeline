@@ -1,9 +1,6 @@
 import { fileURLToPath } from "url";
 
-import defaultOptions, {
-	functionCallbacks,
-	optionCallbacksPipe,
-} from "../options/index.js";
+import defaultOptions, { functionCallbacks } from "../options/index.js";
 import type { Options, optionPath } from "../options/index.js";
 
 import applyTo from "./apply-to.js";
@@ -107,9 +104,7 @@ export default class {
 									wrote: async (current) =>
 										csso(current.buffer.toString(), setting)
 											.css,
-									fulfilled: async (
-										pipe: optionCallbacksPipe
-									) =>
+									fulfilled: async (pipe) =>
 										pipe.files > 0
 											? `Successfully compressed a total of ${
 													pipe.files
@@ -142,9 +137,7 @@ export default class {
 											current.buffer.toString(),
 											setting
 										),
-									fulfilled: async (
-										pipe: optionCallbacksPipe
-									) =>
+									fulfilled: async (pipe) =>
 										pipe.files > 0
 											? `Successfully compressed a total of ${
 													pipe.files
@@ -179,9 +172,7 @@ export default class {
 
 										return code ? code : current.buffer;
 									},
-									fulfilled: async (
-										pipe: optionCallbacksPipe
-									) =>
+									fulfilled: async (pipe) =>
 										pipe.files > 0
 											? `Successfully compressed a total of ${
 													pipe.files
@@ -221,9 +212,7 @@ export default class {
 											sequentialRead: true,
 											unlimited: true,
 										}),
-									fulfilled: async (
-										pipe: optionCallbacksPipe
-									) =>
+									fulfilled: async (pipe) =>
 										pipe.files > 0
 											? `Successfully compressed a total of ${
 													pipe.files
@@ -262,9 +251,7 @@ export default class {
 
 										return current.buffer;
 									},
-									fulfilled: async (
-										pipe: optionCallbacksPipe
-									) =>
+									fulfilled: async (pipe) =>
 										pipe.files > 0
 											? `Successfully compressed a total of ${
 													pipe.files

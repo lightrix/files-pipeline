@@ -14,15 +14,15 @@ export type optionBuffer =
 export interface functionCallbacks {
 	fulfilled?:
 		| boolean
-		| ((pipe: optionCallbacksPipe) => Promise<string | false>);
+		| ((pipe: optionCallbacksPipe) => Promise<false | string>);
 
 	failed?:
 		| boolean
-		| ((inputPath: optionCallbacksFile["inputPath"]) => Promise<string>);
+		| ((inputPath: optionCallbacksFile) => Promise<false | string>);
 
 	accomplished?:
 		| boolean
-		| ((current: optionCallbacksFile) => Promise<string>);
+		| ((current: optionCallbacksFile) => Promise<false | string>);
 
 	changed?: (pipe: optionCallbacksPipe) => Promise<optionCallbacksPipe>;
 
@@ -82,7 +82,8 @@ export default {
 		read: async (current) =>
 			await fs.promises.readFile(current.inputPath, "utf-8"),
 		passed: async () => true,
-		failed: async (inputPath) => `Error: Cannot process file ${inputPath}!`,
+		failed: async (current) =>
+			`Error: Cannot process file ${current.inputPath}!`,
 		accomplished: async (current) =>
 			`Processed ${current.inputPath} in ${current.outputPath}.`,
 		fulfilled: async (pipe) =>

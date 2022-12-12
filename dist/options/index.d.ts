@@ -6,9 +6,9 @@ import type { Pattern } from "fast-glob";
 export type optionDebug = 0 | 1 | 2;
 export type optionBuffer = string | NodeJS.ArrayBufferView | Iterable<string | NodeJS.ArrayBufferView> | AsyncIterable<string | NodeJS.ArrayBufferView> | Stream;
 export interface functionCallbacks {
-    fulfilled?: boolean | ((pipe: optionCallbacksPipe) => Promise<string | false>);
-    failed?: boolean | ((inputPath: optionCallbacksFile["inputPath"]) => Promise<string>);
-    accomplished?: boolean | ((current: optionCallbacksFile) => Promise<string>);
+    fulfilled?: boolean | ((pipe: optionCallbacksPipe) => Promise<false | string>);
+    failed?: boolean | ((inputPath: optionCallbacksFile) => Promise<false | string>);
+    accomplished?: boolean | ((current: optionCallbacksFile) => Promise<false | string>);
     changed?: (pipe: optionCallbacksPipe) => Promise<optionCallbacksPipe>;
     passed?: (current: optionCallbacksFile) => Promise<boolean>;
     read?: (current: optionCallbacksFile) => Promise<optionBuffer>;
@@ -45,7 +45,7 @@ declare const _default: {
         wrote: (current: optionCallbacksFile) => Promise<optionBuffer>;
         read: (current: optionCallbacksFile) => Promise<string>;
         passed: () => Promise<true>;
-        failed: (inputPath: string) => Promise<string>;
+        failed: (current: optionCallbacksFile) => Promise<string>;
         accomplished: (current: optionCallbacksFile) => Promise<string>;
         fulfilled: (pipe: optionCallbacksPipe) => Promise<string | false>;
         changed: (pipe: optionCallbacksPipe) => Promise<optionCallbacksPipe>;

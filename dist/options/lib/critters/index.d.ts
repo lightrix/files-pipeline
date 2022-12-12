@@ -1,6 +1,5 @@
 import type { Options as OptionsBase } from "../../index.js";
 import type { Options as CrittersOptions } from "critters";
-import type { optionCallbacksPipe } from "../../index.js";
 export interface Options extends OptionsBase {
     [key: string]: any;
     critters?: boolean | CrittersOptions;
@@ -16,10 +15,10 @@ declare const _default: {
         wrote: (current: import("../../index.js").optionCallbacksFile) => Promise<import("../../index.js").optionBuffer>;
         read: (current: import("../../index.js").optionCallbacksFile) => Promise<string>;
         passed: () => Promise<true>;
-        failed: (inputPath: string) => Promise<string>;
+        failed: (current: import("../../index.js").optionCallbacksFile) => Promise<string>;
         accomplished: false;
-        fulfilled: (pipe: optionCallbacksPipe) => Promise<string | false>;
-        changed: (pipe: optionCallbacksPipe) => Promise<optionCallbacksPipe>;
+        fulfilled: (pipe: import("../../index.js").optionCallbacksPipe) => Promise<string | false>;
+        changed: (pipe: import("../../index.js").optionCallbacksPipe) => Promise<import("../../index.js").optionCallbacksPipe>;
     };
 };
 export default _default;

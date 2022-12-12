@@ -1,5 +1,4 @@
 import type { Options as OptionsBase } from "../../index.js";
-import type { optionCallbacksFile, optionCallbacksPipe } from "../../index.js";
 import type CSS from "./css.js";
 import type HTML from "./html.js";
 import type IMG from "./img.js";
@@ -91,13 +90,13 @@ declare const _default: {
         plugins: "preset-default"[];
     };
     pipeline: {
-        wrote: (current: optionCallbacksFile) => Promise<import("../../index.js").optionBuffer>;
-        read: (current: optionCallbacksFile) => Promise<string>;
-        passed: (current: optionCallbacksFile) => Promise<boolean>;
-        failed: (inputPath: optionCallbacksFile["inputPath"]) => Promise<string>;
-        accomplished: (current: optionCallbacksFile) => Promise<string>;
-        fulfilled: (pipe: optionCallbacksPipe) => Promise<string | false>;
-        changed: (pipe: optionCallbacksPipe) => Promise<optionCallbacksPipe>;
+        wrote: (current: import("../../index.js").optionCallbacksFile) => Promise<import("../../index.js").optionBuffer>;
+        read: (current: import("../../index.js").optionCallbacksFile) => Promise<string>;
+        passed: (current: import("../../index.js").optionCallbacksFile) => Promise<boolean>;
+        failed: (current: import("../../index.js").optionCallbacksFile) => Promise<string>;
+        accomplished: (current: import("../../index.js").optionCallbacksFile) => Promise<string>;
+        fulfilled: (pipe: import("../../index.js").optionCallbacksPipe) => Promise<string | false>;
+        changed: (pipe: import("../../index.js").optionCallbacksPipe) => Promise<import("../../index.js").optionCallbacksPipe>;
     };
 };
 export default _default;

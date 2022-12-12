@@ -39,7 +39,7 @@ export default class {
 		this.pipe.debug = debug;
 	}
 
-	async in(path: optionPath = false) {
+	async in(path: optionPath = "./") {
 		if (!path) {
 			return this;
 		}
@@ -62,7 +62,7 @@ export default class {
 		return this;
 	}
 
-	async by(glob: Pattern | Pattern[] | false = false) {
+	async by(glob: Pattern | Pattern[] | false = "**/*") {
 		if (!glob) {
 			return this;
 		}
@@ -183,7 +183,7 @@ export default class {
 									this.pipe.current
 								);
 
-								if (message.length > 0 || !message) {
+								if (!message || message.length > 0) {
 									console.log(message);
 								}
 							}
@@ -194,9 +194,9 @@ export default class {
 				this.results.delete(outputPath);
 
 				if (typeof callbacks.failed === "function") {
-					const message = await callbacks.failed(inputPath);
+					const message = await callbacks.failed(this.pipe.current);
 
-					if (message.length > 0 || !message) {
+					if (!message || message.length > 0) {
 						console.log(message);
 					}
 				}
@@ -205,7 +205,11 @@ export default class {
 
 		if (this.pipe.debug > 0 && this.results.size > 0) {
 			if (typeof callbacks.fulfilled === "function") {
-				console.log(await callbacks.fulfilled(this.pipe));
+				const message = await callbacks.fulfilled(this.pipe);
+
+				if (!message || message.length > 0) {
+					console.log(message);
+				}
 			}
 		}
 

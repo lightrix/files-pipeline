@@ -6,7 +6,6 @@ import type { functionCallbacks, Options as OptionsBase } from "../../index.js";
 import type { Options as CrittersOptions } from "critters";
 
 import defaultOptions from "../../index.js";
-import type { optionCallbacksPipe } from "../../index.js";
 
 export interface Options extends OptionsBase {
 	// rome-ignore lint/suspicious/noExplicitAny:
@@ -23,9 +22,9 @@ export default {
 		pruneSource: true,
 	},
 	pipeline: deepmerge(defaultOptions.pipeline, {
-		failed: async (inputPath: string) =>
-			`Error: Cannot inline file ${inputPath}!`,
-		fulfilled: async (pipe: optionCallbacksPipe) =>
+		failed: async (current) =>
+			`Error: Cannot inline file ${current.inputPath}!`,
+		fulfilled: async (pipe) =>
 			pipe.files > 0
 				? `Successfully inlined a total of ${pipe.files} HTML ${
 						pipe.files === 1 ? "file" : "files"
