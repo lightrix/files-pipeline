@@ -75,7 +75,7 @@ export interface optionCallbacksFile {
 
 export default {
 	path: "./dist/",
-	// rome-ignore lint/nursery/noPrecisionLoss: <explanation>
+	// rome-ignore lint/nursery/noPrecisionLoss:
 	logger: 2,
 	pipeline: {
 		wrote: async (current) => current.buffer,

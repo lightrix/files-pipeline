@@ -1,4 +1,4 @@
-// rome-ignore lint:
+// rome-ignore lint/suspicious/noExplicitAny:
 export default (test: any, fn: any) => {
 	let tests;
 

@@ -24,6 +24,7 @@ import type { Options as CompressOptions } from "../options/lib/compress/index.j
 import defaultCompressOptions from "../options/lib/compress/index.js";
 
 import sharpRead from "./vendor/sharp-read.js";
+import type { currentSharp } from "./vendor/sharp-read.js";
 
 // critters
 // @ts-ignore
@@ -210,8 +211,8 @@ export default class {
 							.apply(
 								deepmerge(defaultCompressOptions.pipeline, {
 									wrote: async (current) =>
-										await sharpRead(
-											current.buffer,
+										sharpRead(
+											current as currentSharp,
 											setting
 										),
 									read: async (current) =>

@@ -1,9 +1,19 @@
+import type { Sharp } from "sharp";
+import type { optionCallbacksFile } from "../../options/index.js";
 import type IMG from "../../options/lib/compress/img.js";
 import defaultOptions from "../../options/lib/compress/index.js";
 
-// rome-ignore lint:
-export default async (sharpFile: any, options: IMG = {}) => {
-	const fileType = sharpFile.options.input.file.split(".").pop();
+export interface sharpBuffer extends Sharp {
+	// rome-ignore lint/suspicious/noExplicitAny:
+	[key: string]: any;
+}
+
+export interface currentSharp extends Omit<optionCallbacksFile, "buffer"> {
+	buffer: sharpBuffer;
+}
+
+export default async (current: currentSharp, options: IMG = {}) => {
+	const fileType = current.inputPath.split(".").pop();
 
 	if (!fileType) {
 		return;
@@ -43,14 +53,17 @@ export default async (sharpFile: any, options: IMG = {}) => {
 	];
 
 	if (
+		optionType &&
 		validOptionCalls.includes(optionType) &&
 		typeof options[optionType] !== "undefined" &&
 		options[optionType] !== false
 	) {
-		return await sharpFile[optionType](
-			options[optionType] !== true
-				? options[optionType]
-				: defaultOptions["img"]
-		).toBuffer();
+		if (optionType in current.buffer) {
+			return await current.buffer[optionType](
+				options[optionType] !== true
+					? options[optionType]
+					: defaultOptions["img"]
+			).toBuffer();
+		}
 	}
 };

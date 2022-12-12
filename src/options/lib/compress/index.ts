@@ -73,11 +73,11 @@ export default {
 	img: {
 		avif: {
 			chromaSubsampling: "4:4:4",
-			// rome-ignore lint/nursery/noPrecisionLoss: <explanation>
+			// rome-ignore lint/nursery/noPrecisionLoss:
 			effort: 9,
 		},
 		gif: {
-			// rome-ignore lint/nursery/noPrecisionLoss: <explanation>
+			// rome-ignore lint/nursery/noPrecisionLoss:
 			effort: 10,
 		},
 		jpeg: {
@@ -88,7 +88,7 @@ export default {
 			optimiseScans: true,
 		},
 		png: {
-			// rome-ignore lint/nursery/noPrecisionLoss: <explanation>
+			// rome-ignore lint/nursery/noPrecisionLoss:
 			compressionLevel: 9,
 			palette: true,
 		},
@@ -97,7 +97,7 @@ export default {
 			compression: "lzw",
 		},
 		webp: {
-			// rome-ignore lint/nursery/noPrecisionLoss: <explanation>
+			// rome-ignore lint/nursery/noPrecisionLoss:
 			effort: 6,
 		},
 	},
@@ -123,7 +123,7 @@ export default {
 					current.fileSizeBefore) *
 				100
 			)
-				// rome-ignore lint/nursery/noPrecisionLoss: <explanation>
+				// rome-ignore lint/nursery/noPrecisionLoss:
 				.toFixed(2)}% reduction) in ${current.outputPath}.`,
 		changed: async (pipe: optionCallbacksPipe) => {
 			pipe.info.total =
