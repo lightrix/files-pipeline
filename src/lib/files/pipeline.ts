@@ -1,10 +1,10 @@
 import * as fs from "fs";
 import { dirname } from "path";
 
-import type { executions } from "../../options/index.js";
-
 import defaults from "../../options/index.js";
 import deepmerge from "../deepmerge.js";
+
+import type { executions } from "../../options/index.js";
 import type files from "../files.js";
 
 export default async (ctx: files, callbacks: executions) => {

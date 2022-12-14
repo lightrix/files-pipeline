@@ -1,4 +1,5 @@
 import FastGlob from "fast-glob";
+
 import type { Pattern } from "fast-glob";
 import type files from "../files.js";
 

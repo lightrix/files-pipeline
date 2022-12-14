@@ -30,11 +30,11 @@ export default class {
 		debug: 2,
 		info: {},
 		current: {
-			inputPath: "",
-			outputPath: "",
+			buffer: "",
 			fileSizeAfter: 0,
 			fileSizeBefore: 0,
-			buffer: "",
+			inputPath: "",
+			outputPath: "",
 		},
 	};
 
