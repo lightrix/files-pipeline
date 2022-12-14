@@ -5,7 +5,7 @@ import type { Stream } from "stream";
 import type { Pattern } from "fast-glob";
 export type optionDebug = 0 | 1 | 2;
 export type optionBuffer = string | NodeJS.ArrayBufferView | Iterable<string | NodeJS.ArrayBufferView> | AsyncIterable<string | NodeJS.ArrayBufferView> | Stream;
-export interface functionCallbacks {
+export interface executions {
     fulfilled?: boolean | ((pipe: optionCallbacksPipe) => Promise<false | string>);
     failed?: boolean | ((inputPath: optionCallbacksFile) => Promise<false | string>);
     accomplished?: boolean | ((current: optionCallbacksFile) => Promise<false | string>);
@@ -22,7 +22,7 @@ export interface Options {
     exclude?: optionExclude | optionExclude[] | Set<optionExclude>;
     files?: Pattern | Pattern[];
     type?: string;
-    pipeline?: functionCallbacks;
+    pipeline?: executions;
     logger?: optionDebug;
 }
 export interface optionCallbacksPipe {

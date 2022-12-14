@@ -1,9 +1,6 @@
 import formatBytes from "../../../lib/format-bytes.js";
-import deepmerge from "../../../lib/deepmerge.js";
 
-import type { functionCallbacks, Options as OptionsBase } from "../../index.js";
-
-import defaultOptions from "../../index.js";
+import type { Options as OptionsBase } from "../../index.js";
 
 import type CSS from "./css.js";
 import type HTML from "./html.js";
@@ -108,7 +105,7 @@ export default {
 		},
 		plugins: ["preset-default"],
 	},
-	pipeline: deepmerge(defaultOptions.pipeline, {
+	pipeline: {
 		failed: async (current) =>
 			`Error: Cannot compress file ${current.inputPath}!`,
 		passed: async (current) =>
@@ -130,5 +127,5 @@ export default {
 				(pipe.current.fileSizeBefore - pipe.current.fileSizeAfter);
 			return pipe;
 		},
-	} satisfies functionCallbacks),
+	},
 } satisfies Options;

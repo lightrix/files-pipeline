@@ -90,12 +90,9 @@ declare const _default: {
         plugins: "preset-default"[];
     };
     pipeline: {
-        wrote: (current: import("../../index.js").optionCallbacksFile) => Promise<import("../../index.js").optionBuffer>;
-        read: (current: import("../../index.js").optionCallbacksFile) => Promise<string>;
-        passed: (current: import("../../index.js").optionCallbacksFile) => Promise<boolean>;
         failed: (current: import("../../index.js").optionCallbacksFile) => Promise<string>;
+        passed: (current: import("../../index.js").optionCallbacksFile) => Promise<boolean>;
         accomplished: (current: import("../../index.js").optionCallbacksFile) => Promise<string>;
-        fulfilled: (pipe: import("../../index.js").optionCallbacksPipe) => Promise<string | false>;
         changed: (pipe: import("../../index.js").optionCallbacksPipe) => Promise<import("../../index.js").optionCallbacksPipe>;
     };
 };

@@ -1,7 +1,8 @@
 import { fileURLToPath } from "url";
 
-import defaultOptions, { functionCallbacks } from "../options/index.js";
-import type { Options, optionPath } from "../options/index.js";
+import type { Options, optionPath, executions } from "../options/index.js";
+
+import defaults from "../options/index.js";
 
 import applyTo from "./apply-to.js";
 import formatBytes from "./format-bytes.js";
@@ -18,7 +19,7 @@ import type { Output } from "svgo";
 
 import type { Options as CompressOptions } from "../options/lib/compress/index.js";
 
-import defaultCompressOptions from "../options/lib/compress/index.js";
+import defaultsCompress from "../options/lib/compress/index.js";
 
 import sharpRead from "./vendor/sharp-read.js";
 import type { currentSharp } from "./vendor/sharp-read.js";
@@ -37,7 +38,7 @@ export default class {
 
 	constructor(options: Options = {}) {
 		this.options = options;
-		this.mergeDefaultOptions(defaultOptions);
+		this.mergeDefaultOptions(defaults);
 	}
 
 	private mergeDefaultOptions(
@@ -70,20 +71,20 @@ export default class {
 
 	async process() {
 		for (const path of this.paths) {
-			await (
+			(
 				await (
-					await new files(this.options.logger).in(path)
-				).by(this.options.files)
-			)
-				.not(this.options.exclude)
-				.apply(this.options.pipeline);
+					await (
+						await new files(this.options.logger).in(path)
+					).by(this.options.files)
+				).not(this.options.exclude)
+			).pipeline(this.options.pipeline);
 		}
 
 		return this;
 	}
 
 	async compress() {
-		this.mergeDefaultOptions(defaultCompressOptions);
+		this.mergeDefaultOptions(defaultsCompress);
 
 		for (const [fileType, setting] of Object.entries(this.options)) {
 			if (!setting) {
@@ -95,30 +96,32 @@ export default class {
 					case "css": {
 						await (
 							await (
-								await new files(this.options.logger).in(path)
-							).by("**/*.css")
-						)
-							.not(this.options.exclude)
-							.apply(
-								deepmerge(defaultCompressOptions.pipeline, {
-									wrote: async (current) =>
-										csso(current.buffer.toString(), setting)
-											.css,
-									fulfilled: async (pipe) =>
-										pipe.files > 0
-											? `Successfully compressed a total of ${
-													pipe.files
-											  } CSS ${
-													// rome-ignore lint/nursery/noPrecisionLoss:
-													pipe.files === 1
-														? "file"
-														: "files"
-											  } for ${await formatBytes(
-													pipe.info.total
-											  )}.`
-											: false,
-								} satisfies functionCallbacks)
-							);
+								await (
+									await new files(this.options.logger).in(
+										path
+									)
+								).by("**/*.css")
+							).not(this.options.exclude)
+						).pipeline(
+							deepmerge(defaultsCompress.pipeline, {
+								wrote: async (current) =>
+									csso(current.buffer.toString(), setting)
+										.css,
+								fulfilled: async (pipe) =>
+									pipe.files > 0
+										? `Successfully compressed a total of ${
+												pipe.files
+										  } CSS ${
+												// rome-ignore lint/nursery/noPrecisionLoss:
+												pipe.files === 1
+													? "file"
+													: "files"
+										  } for ${await formatBytes(
+												pipe.info.total
+										  )}.`
+										: false,
+							} satisfies executions)
+						);
 
 						break;
 					}
@@ -126,146 +129,151 @@ export default class {
 					case "html": {
 						await (
 							await (
-								await new files(this.options.logger).in(path)
-							).by("**/*.html")
-						)
-							.not(this.options.exclude)
-							.apply(
-								deepmerge(defaultCompressOptions.pipeline, {
-									wrote: async (current) =>
-										await htmlMinifierTerser(
-											current.buffer.toString(),
-											setting
-										),
-									fulfilled: async (pipe) =>
-										pipe.files > 0
-											? `Successfully compressed a total of ${
-													pipe.files
-											  } HTML ${
-													// rome-ignore lint/nursery/noPrecisionLoss:
-													pipe.files === 1
-														? "file"
-														: "files"
-											  } for ${await formatBytes(
-													pipe.info.total
-											  )}.`
-											: false,
-								} satisfies functionCallbacks)
-							);
+								await (
+									await new files(this.options.logger).in(
+										path
+									)
+								).by("**/*.html")
+							).not(this.options.exclude)
+						).pipeline(
+							deepmerge(defaultsCompress.pipeline, {
+								wrote: async (current) =>
+									await htmlMinifierTerser(
+										current.buffer.toString(),
+										setting
+									),
+								fulfilled: async (pipe) =>
+									pipe.files > 0
+										? `Successfully compressed a total of ${
+												pipe.files
+										  } HTML ${
+												// rome-ignore lint/nursery/noPrecisionLoss:
+												pipe.files === 1
+													? "file"
+													: "files"
+										  } for ${await formatBytes(
+												pipe.info.total
+										  )}.`
+										: false,
+							} satisfies executions)
+						);
 						break;
 					}
 
 					case "js": {
 						await (
 							await (
-								await new files(this.options.logger).in(path)
-							).by("**/*.{js,mjs,cjs}")
-						)
-							.not(this.options.exclude)
-							.apply(
-								deepmerge(defaultCompressOptions.pipeline, {
-									wrote: async (current) => {
-										const { code } = await terser(
-											current.buffer.toString(),
-											setting
-										);
+								await (
+									await new files(this.options.logger).in(
+										path
+									)
+								).by("**/*.{js,mjs,cjs}")
+							).not(this.options.exclude)
+						).pipeline(
+							deepmerge(defaultsCompress.pipeline, {
+								wrote: async (current) => {
+									const { code } = await terser(
+										current.buffer.toString(),
+										setting
+									);
 
-										return code ? code : current.buffer;
-									},
-									fulfilled: async (pipe) =>
-										pipe.files > 0
-											? `Successfully compressed a total of ${
-													pipe.files
-											  } JS ${
-													// rome-ignore lint/nursery/noPrecisionLoss:
-													pipe.files === 1
-														? "file"
-														: "files"
-											  } for ${await formatBytes(
-													pipe.info.total
-											  )}.`
-											: false,
-								} satisfies functionCallbacks)
-							);
+									return code ? code : current.buffer;
+								},
+								fulfilled: async (pipe) =>
+									pipe.files > 0
+										? `Successfully compressed a total of ${
+												pipe.files
+										  } JS ${
+												// rome-ignore lint/nursery/noPrecisionLoss:
+												pipe.files === 1
+													? "file"
+													: "files"
+										  } for ${await formatBytes(
+												pipe.info.total
+										  )}.`
+										: false,
+							} satisfies executions)
+						);
 						break;
 					}
 
 					case "img": {
 						await (
 							await (
-								await new files(this.options.logger).in(path)
-							).by(
-								"**/*.{avci,avcs,avif,avifs,gif,heic,heics,heif,heifs,jfif,jif,jpe,jpeg,jpg,png,raw,tiff,webp}"
-							)
-						)
-							.not(this.options.exclude)
-							.apply(
-								deepmerge(defaultCompressOptions.pipeline, {
-									wrote: async (current) =>
-										sharpRead(
-											current as currentSharp,
-											setting
-										),
-									read: async (current) =>
-										sharp(current.inputPath, {
-											failOn: "none",
-											sequentialRead: true,
-											unlimited: true,
-										}),
-									fulfilled: async (pipe) =>
-										pipe.files > 0
-											? `Successfully compressed a total of ${
-													pipe.files
-											  } IMG ${
-													// rome-ignore lint/nursery/noPrecisionLoss:
-													pipe.files === 1
-														? "file"
-														: "files"
-											  } for ${await formatBytes(
-													pipe.info.total
-											  )}.`
-											: false,
-								} satisfies functionCallbacks)
-							);
+								await (
+									await new files(this.options.logger).in(
+										path
+									)
+								).by(
+									"**/*.{avci,avcs,avif,avifs,gif,heic,heics,heif,heifs,jfif,jif,jpe,jpeg,jpg,png,raw,tiff,webp}"
+								)
+							).not(this.options.exclude)
+						).pipeline(
+							deepmerge(defaultsCompress.pipeline, {
+								wrote: async (current) =>
+									sharpRead(current as currentSharp, setting),
+								read: async (current) =>
+									sharp(current.inputPath, {
+										failOn: "none",
+										sequentialRead: true,
+										unlimited: true,
+									}),
+								fulfilled: async (pipe) =>
+									pipe.files > 0
+										? `Successfully compressed a total of ${
+												pipe.files
+										  } IMG ${
+												// rome-ignore lint/nursery/noPrecisionLoss:
+												pipe.files === 1
+													? "file"
+													: "files"
+										  } for ${await formatBytes(
+												pipe.info.total
+										  )}.`
+										: false,
+							} satisfies executions)
+						);
 						break;
 					}
 
 					case "svg": {
 						await (
 							await (
-								await new files(this.options.logger).in(path)
-							).by("**/*.svg")
-						)
-							.not(this.options.exclude)
-							.apply(
-								deepmerge(defaultCompressOptions.pipeline, {
-									wrote: async (current) => {
-										const { data } = svgo(
-											current.buffer.toString(),
-											setting
-										) as Output;
+								await (
+									await new files(this.options.logger).in(
+										path
+									)
+								).by("**/*.svg")
+							).not(this.options.exclude)
+						).pipeline(
+							deepmerge(defaultsCompress.pipeline, {
+								wrote: async (current) => {
+									const { data } = svgo(
+										current.buffer.toString(),
+										setting
+									) as Output;
 
-										if (typeof data !== "undefined") {
-											return data;
-										}
+									if (typeof data !== "undefined") {
+										return data;
+									}
 
-										return current.buffer;
-									},
-									fulfilled: async (pipe) =>
-										pipe.files > 0
-											? `Successfully compressed a total of ${
-													pipe.files
-											  } SVG ${
-													// rome-ignore lint/nursery/noPrecisionLoss:
-													pipe.files === 1
-														? "file"
-														: "files"
-											  } for ${await formatBytes(
-													pipe.info.total
-											  )}.`
-											: false,
-								} satisfies functionCallbacks)
-							);
+									return current.buffer;
+								},
+								fulfilled: async (pipe) =>
+									pipe.files > 0
+										? `Successfully compressed a total of ${
+												pipe.files
+										  } SVG ${
+												// rome-ignore lint/nursery/noPrecisionLoss:
+												pipe.files === 1
+													? "file"
+													: "files"
+										  } for ${await formatBytes(
+												pipe.info.total
+										  )}.`
+										: false,
+							} satisfies executions)
+						);
 						break;
 					}
 
@@ -282,7 +290,7 @@ export default class {
 		this.mergeDefaultOptions(defaultCrittersOptions);
 
 		for (const path of this.paths) {
-			const _path = applyTo(path, (url: URL | string) =>
+			const _path = await applyTo(path, (url: URL | string) =>
 				url instanceof URL ? fileURLToPath(url) : url
 			);
 
@@ -311,16 +319,15 @@ export default class {
 
 			await (
 				await (
-					await new files(this.options.logger).in(path)
-				).by("**/*.html")
-			)
-				.not(this.options.exclude)
-				.apply(
-					deepmerge(defaultCrittersOptions.pipeline, {
-						wrote: async (current) =>
-							critters.process(current.buffer),
-					} satisfies functionCallbacks)
-				);
+					await (
+						await new files(this.options.logger).in(path)
+					).by("**/*.html")
+				).not(this.options.exclude)
+			).pipeline(
+				deepmerge(defaultCrittersOptions.pipeline, {
+					wrote: async (current) => critters.process(current.buffer),
+				} satisfies executions)
+			);
 		}
 
 		return this;

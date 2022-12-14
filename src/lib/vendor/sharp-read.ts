@@ -1,7 +1,8 @@
 import type { Sharp } from "sharp";
 import type { optionCallbacksFile } from "../../options/index.js";
 import type IMG from "../../options/lib/compress/img.js";
-import defaultOptions from "../../options/lib/compress/index.js";
+
+import defaults from "../../options/lib/compress/index.js";
 
 export interface sharpBuffer extends Sharp {
 	// rome-ignore lint/suspicious/noExplicitAny:
@@ -62,7 +63,7 @@ export default async (current: currentSharp, options: IMG = {}) => {
 			return await current.buffer[optionType](
 				options[optionType] !== true
 					? options[optionType]
-					: defaultOptions["img"]
+					: defaults["img"]
 			).toBuffer();
 		}
 	}

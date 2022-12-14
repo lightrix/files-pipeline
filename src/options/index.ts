@@ -11,7 +11,7 @@ export type optionBuffer =
 	| AsyncIterable<string | NodeJS.ArrayBufferView>
 	| Stream;
 
-export interface functionCallbacks {
+export interface executions {
 	fulfilled?:
 		| boolean
 		| ((pipe: optionCallbacksPipe) => Promise<false | string>);
@@ -49,7 +49,7 @@ export interface Options {
 
 	type?: string;
 
-	pipeline?: functionCallbacks;
+	pipeline?: executions;
 
 	logger?: optionDebug;
 }

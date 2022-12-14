@@ -1,11 +1,11 @@
 import deepmerge from "../../../lib/deepmerge.js";
 
-import type { functionCallbacks, Options as OptionsBase } from "../../index.js";
+import type { executions, Options as OptionsBase } from "../../index.js";
 
 // @ts-ignore
 import type { Options as CrittersOptions } from "critters";
 
-import defaultOptions from "../../index.js";
+import options from "../../index.js";
 
 export interface Options extends OptionsBase {
 	// rome-ignore lint/suspicious/noExplicitAny:
@@ -21,7 +21,7 @@ export default {
 		compress: true,
 		pruneSource: true,
 	},
-	pipeline: deepmerge(defaultOptions.pipeline, {
+	pipeline: {
 		failed: async (current) =>
 			`Error: Cannot inline file ${current.inputPath}!`,
 		fulfilled: async (pipe) =>
@@ -31,5 +31,5 @@ export default {
 				  }.`
 				: false,
 		accomplished: false,
-	} satisfies functionCallbacks),
+	},
 } satisfies Options;

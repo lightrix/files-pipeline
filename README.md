@@ -71,8 +71,8 @@ import { files } from "@nikolarhristov/pipeline";
 import * as fs from "fs";
 
 await (
-	await (await new files().in("./input/")).by("**/*.md")
-).apply({
+	await (await files().in("./input/")).by("**/*.md")
+).on({
 	wrote: async (current) => current.buffer,
 	read: async (current) =>
 		await fs.promises.readFile(current.inputPath, "utf-8"),

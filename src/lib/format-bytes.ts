@@ -1,4 +1,4 @@
-	// rome-ignore lint/nursery/noPrecisionLoss:
+// rome-ignore lint/nursery/noPrecisionLoss:
 export default async (bytes: number, decimals = 2) => {
 	if (bytes === 0) {
 		return "0 Bytes";
