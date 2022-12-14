@@ -1,11 +1,7 @@
-import deepmerge from "../../../lib/deepmerge.js";
-
-import type { executions, Options as OptionsBase } from "../../index.js";
+import type { Options as OptionsBase } from "../../index.js";
 
 // @ts-ignore
 import type { Options as CrittersOptions } from "critters";
-
-import options from "../../index.js";
 
 export interface Options extends OptionsBase {
 	// rome-ignore lint/suspicious/noExplicitAny:
