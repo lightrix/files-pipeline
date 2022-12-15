@@ -1,8 +1,9 @@
+import type { Options as OptionsBase } from "../../index.js";
 import type CSS from "./css.js";
 import type HTML from "./html.js";
 import type JS from "./js.js";
 import type SVG from "./svg.js";
-export interface Options {
+export interface Options extends OptionsBase {
     [key: string]: any;
     css?: boolean | CSS;
     html?: boolean | HTML;
@@ -58,6 +59,12 @@ declare const _default: {
             pretty: false;
         };
         plugins: "preset-default"[];
+    };
+    pipeline: {
+        failed: (current: import("../../index.js").optionCallbacksFile) => Promise<string>;
+        passed: (current: import("../../index.js").optionCallbacksFile) => Promise<boolean>;
+        accomplished: (current: import("../../index.js").optionCallbacksFile) => Promise<string>;
+        changed: (pipe: import("../../index.js").optionCallbacksPipe) => Promise<import("../../index.js").optionCallbacksPipe>;
     };
 };
 export default _default;

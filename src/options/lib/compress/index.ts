@@ -1,10 +1,14 @@
+import formatBytes from "../../../lib/format-bytes.js";
+
+import type { Options as OptionsBase } from "../../index.js";
+
 import type CSS from "./css.js";
 import type HTML from "./html.js";
 import type JS from "./js.js";
 import type SVG from "./svg.js";
 
-export interface Options {
-	// rome-ignore lint:
+export interface Options extends OptionsBase {
+	// rome-ignore lint/suspicious/noExplicitAny:
 	[key: string]: any;
 
 	css?: boolean | CSS;
@@ -37,7 +41,7 @@ export default {
 		processConditionalComments: false,
 		removeAttributeQuotes: true,
 		removeComments: true,
-		ignoreCustomComments: [/^!/, /^\s*#/, /^ /],
+		ignoreCustomComments: [/^\s*#/, /^\s*\[/, /^\s*\]/, /^\s*!/, /^\s*\//],
 		removeScriptTypeAttributes: true,
 		removeStyleLinkTypeAttributes: true,
 		removeTagWhitespace: false,
@@ -49,6 +53,7 @@ export default {
 		quoteCharacter: '"',
 	},
 	js: {
+		// rome-ignore lint/nursery/noPrecisionLoss:
 		ecma: 5,
 		enclose: false,
 		keep_classnames: false,
@@ -65,5 +70,28 @@ export default {
 			pretty: false,
 		},
 		plugins: ["preset-default"],
+	},
+	pipeline: {
+		failed: async (current) =>
+			`Error: Cannot compress file ${current.inputPath}!`,
+		passed: async (current) =>
+			current.fileSizeBefore >
+			Buffer.byteLength(current.buffer.toString()),
+		accomplished: async (current) =>
+			`Compressed ${current.inputPath} for ${await formatBytes(
+				current.fileSizeBefore - current.fileSizeAfter
+			)} (${(
+				((current.fileSizeBefore - current.fileSizeAfter) /
+					current.fileSizeBefore) *
+				100
+			)
+				// rome-ignore lint/nursery/noPrecisionLoss:
+				.toFixed(2)}% reduction) in ${current.outputPath}.`,
+		changed: async (pipe) => {
+			pipe.info.total =
+				(pipe.info.total ? pipe.info.total : 0) +
+				(pipe.current.fileSizeBefore - pipe.current.fileSizeAfter);
+			return pipe;
+		},
 	},
 } satisfies Options;

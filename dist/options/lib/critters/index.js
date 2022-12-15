@@ -1,1 +1,1 @@
-var t={critters:{preload:"media",inlineFonts:!0,compress:!0,pruneSource:!0}};export{t as default};
+var t={critters:{preload:"media",inlineFonts:!0,compress:!0,pruneSource:!0},pipeline:{failed:async e=>`Error: Cannot inline file ${e.inputPath}!`,fulfilled:async e=>e.files>0?`Successfully inlined a total of ${e.files} HTML ${e.files===1?"file":"files"}.`:!1,accomplished:!1}};export{t as default};

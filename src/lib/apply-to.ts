@@ -1,4 +1,9 @@
-export default (test: any, fn: any) => {
+export default async (
+	// rome-ignore lint/suspicious/noExplicitAny: <explanation>
+	test: any,
+	// rome-ignore lint/suspicious/noExplicitAny: <explanation>
+	fn: any
+) => {
 	let tests;
 
 	switch (true) {
@@ -6,7 +11,7 @@ export default (test: any, fn: any) => {
 			tests = new Map();
 
 			for (const [key, value] of test) {
-				tests.set(fn(key), fn(value));
+				tests.set(await fn(key), await fn(value));
 			}
 
 			return tests;
@@ -16,7 +21,7 @@ export default (test: any, fn: any) => {
 			tests = new Set();
 
 			for (const el of test) {
-				tests.add(fn(el));
+				tests.add(await fn(el));
 			}
 
 			return tests;
@@ -26,13 +31,13 @@ export default (test: any, fn: any) => {
 			tests = new Array();
 
 			for (const index of test) {
-				tests.push(fn(index));
+				tests.push(await fn(index));
 			}
 
 			return tests;
 		}
 
 		default:
-			return fn(test);
+			return await fn(test);
 	}
 };
