@@ -1,11 +1,11 @@
-# [@nikolarhristov/pipeline] 🧪
+# [files-pipeline] 🧪
 
 ## Installation
 
-First, install the `@nikolarhristov/pipeline` component like so:
+First, install the `files-pipeline` component like so:
 
 ```
-npm install -D -E @nikolarhristov/pipeline
+npm install -D -E files-pipeline
 ```
 
 Then, create a new pipeline from this component:
@@ -13,7 +13,7 @@ Then, create a new pipeline from this component:
 **`index.ts`**
 
 ```ts
-import { pipeline } from "@nikolarhristov/pipeline";
+import { pipeline } from "files-pipeline";
 
 new pipeline({
 	path: "./input/",
@@ -28,7 +28,7 @@ call the callback on each file from the pipeline.
 **`index.ts`**
 
 ```ts
-import { pipeline } from "@nikolarhristov/pipeline";
+import { pipeline } from "files-pipeline";
 
 await new pipeline({
 	path: "./input/",
@@ -43,7 +43,7 @@ await new pipeline({
 These are the defaults for each callback.
 
 ```ts
-import { pipeline } from "@nikolarhristov/pipeline";
+import { pipeline } from "files-pipeline";
 import * as fs from "fs";
 
 await new pipeline({
@@ -67,7 +67,7 @@ await new pipeline({
 or you can query the files object directly:
 
 ```ts
-import { files } from "@nikolarhristov/pipeline";
+import { files } from "files-pipeline";
 import * as fs from "fs";
 
 await (
@@ -95,7 +95,7 @@ and JavaScript or inline the critical CSS in the HTML files in that directory.
 **`index.ts`**
 
 ```ts
-import { pipeline } from "@nikolarhristov/pipeline";
+import { pipeline } from "files-pipeline";
 
 await (
 	await new pipeline({
@@ -141,7 +141,7 @@ or disable them entirely:
 **`index.ts`**
 
 ```ts
-import { pipeline } from "@nikolarhristov/pipeline";
+import { pipeline } from "files-pipeline";
 
 new pipeline({
 	path: "./input/",
@@ -160,7 +160,7 @@ the `path` variable.
 **`index.ts`**
 
 ```ts
-import { pipeline } from "@nikolarhristov/pipeline";
+import { pipeline } from "files-pipeline";
 
 new pipeline({
 	path: ["./input/", "./input2/"],
@@ -172,7 +172,7 @@ You can also provide a map of paths for different input output directories.
 **`index.ts`**
 
 ```ts
-import { pipeline } from "@nikolarhristov/pipeline";
+import { pipeline } from "files-pipeline";
 
 new pipeline({
 	path: new Map([["./input", "./output"]]),
@@ -184,7 +184,7 @@ Or an array of the two.
 **`index.ts`**
 
 ```ts
-import { pipeline } from "@nikolarhristov/pipeline";
+import { pipeline } from "files-pipeline";
 
 new pipeline({
 	path: ["./input", new Map([["./input", "./output"]])],
@@ -198,7 +198,7 @@ file names.
 **`index.ts`**
 
 ```ts
-import { pipeline } from "@nikolarhristov/pipeline";
+import { pipeline } from "files-pipeline";
 
 new pipeline({
 	exclude: [
@@ -214,14 +214,14 @@ Set `logger` to `0` if you do not want to see debug messages. Default is `2`.
 **`index.ts`**
 
 ```ts
-import { pipeline } from "@nikolarhristov/pipeline";
+import { pipeline } from "files-pipeline";
 
 new pipeline({
 	logger: 0,
 });
 ```
 
-[@nikolarhristov/pipeline]: https://npmjs.org/@nikolarhristov/pipeline
+[files-pipeline]: https://npmjs.org/files-pipeline
 [svgo]: https://npmjs.org/svgo
 
 ## Changelog

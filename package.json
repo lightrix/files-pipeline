@@ -1,15 +1,15 @@
 {
-	"name": "@nikolarhristov/pipeline",
-	"version": "0.1.7",
+	"name": "files-pipeline",
+	"version": "0.0.1",
 	"type": "module",
 	"description": "🧪 Pipeline for files.",
 	"repository": {
 		"type": "git",
-		"url": "https://github.com/nikolaxhristov/pipeline.git"
+		"url": "https://github.com/lightrix/files-pipeline.git"
 	},
-	"homepage": "https://github.com/nikolaxhristov/pipeline#readme",
+	"homepage": "https://github.com/lightrix/files-pipeline#readme",
 	"bugs": {
-		"url": "https://github.com/nikolaxhristov/pipeline/issues"
+		"url": "https://github.com/lightrix/files-pipeline/issues"
 	},
 	"license": "MIT",
 	"private": false,
