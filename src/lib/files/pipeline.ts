@@ -1,11 +1,12 @@
-import * as fs from "fs";
-import { dirname } from "path";
-
 import defaults from "../../options/index.js";
-import deepmerge from "../deepmerge.js";
 
 import type { executions } from "../../options/index.js";
 import type files from "../files.js";
+
+import * as fs from "fs";
+import { dirname } from "path";
+
+import deepmerge from "../deepmerge.js";
 
 export default async (ctx: files, callbacks: executions) => {
 	callbacks = deepmerge(defaults.pipeline, callbacks);

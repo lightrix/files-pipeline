@@ -14,7 +14,7 @@ import not from "./files/not.js";
 import by from "./files/by.js";
 import _in from "./files/in.js";
 
-export default class {
+export default class files {
 	pipeline = async (callbacks: executions = options.pipeline) =>
 		await pipeline(this, callbacks);
 
@@ -26,7 +26,7 @@ export default class {
 
 	pipe: optionCallbacksPipe = {
 		files: 0,
-		// rome-ignore lint/nursery/noPrecisionLoss: <explanation>
+		// rome-ignore lint/nursery/noPrecisionLoss:
 		debug: 2,
 		info: {},
 		current: {
@@ -42,7 +42,7 @@ export default class {
 
 	results: Map<string, string> = new Map();
 
-	// rome-ignore lint/nursery/noPrecisionLoss: <explanation>
+	// rome-ignore lint/nursery/noPrecisionLoss:
 	constructor(debug: optionCallbacksPipe["debug"] = 2) {
 		this.pipe.debug = debug;
 	}

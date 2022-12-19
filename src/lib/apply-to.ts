@@ -1,14 +1,12 @@
 export default async (
-	// rome-ignore lint/suspicious/noExplicitAny: <explanation>
+	// rome-ignore lint/suspicious/noExplicitAny:
 	test: any,
-	// rome-ignore lint/suspicious/noExplicitAny: <explanation>
+	// rome-ignore lint/suspicious/noExplicitAny:
 	fn: any
 ) => {
-	let tests;
-
 	switch (true) {
 		case test instanceof Map: {
-			tests = new Map();
+			const tests = new Map();
 
 			for (const [key, value] of test) {
 				tests.set(await fn(key), await fn(value));
@@ -18,7 +16,7 @@ export default async (
 		}
 
 		case test instanceof Set: {
-			tests = new Set();
+			const tests = new Set();
 
 			for (const el of test) {
 				tests.add(await fn(el));
@@ -28,7 +26,7 @@ export default async (
 		}
 
 		case test instanceof Array: {
-			tests = new Array();
+			const tests = new Array();
 
 			for (const index of test) {
 				tests.push(await fn(index));

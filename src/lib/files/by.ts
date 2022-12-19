@@ -1,12 +1,9 @@
-import FastGlob from "fast-glob";
-
 import type { Pattern } from "fast-glob";
 import type files from "../files.js";
 
-export default async (
-	ctx: files,
-	glob: Pattern | Pattern[]
-): Promise<files> => {
+import FastGlob from "fast-glob";
+
+export default async (ctx: files, glob: Pattern | Pattern[]) => {
 	if (!glob) {
 		return ctx;
 	}
