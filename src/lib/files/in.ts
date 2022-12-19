@@ -1,9 +1,9 @@
+import type { optionPath } from "../../options/index.js";
+import type files from "../files.js";
+
 import { fileURLToPath } from "url";
 
 import applyTo from "../apply-to.js";
-
-import type { optionPath } from "../../options/index.js";
-import type files from "../files.js";
 
 export default async (ctx: files, path: optionPath) => {
 	const _path = await applyTo(
