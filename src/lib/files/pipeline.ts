@@ -76,7 +76,7 @@ export default async (ctx: files, callbacks: executions) => {
 								ctx.pipe.current
 							);
 
-							if (!message || message.length > 0) {
+							if (message.length > 0) {
 								console.log(message);
 							}
 						}
@@ -89,7 +89,7 @@ export default async (ctx: files, callbacks: executions) => {
 			if (typeof callbacks.failed === "function") {
 				const message = await callbacks.failed(ctx.pipe.current);
 
-				if (!message || message.length > 0) {
+				if (message.length > 0) {
 					console.log(message);
 				}
 			}
@@ -100,7 +100,7 @@ export default async (ctx: files, callbacks: executions) => {
 		if (typeof callbacks.fulfilled === "function") {
 			const message = await callbacks.fulfilled(ctx.pipe);
 
-			if (!message || message.length > 0) {
+			if (message.length > 0) {
 				console.log(message);
 			}
 		}

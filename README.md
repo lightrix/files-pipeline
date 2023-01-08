@@ -52,24 +52,12 @@ or with the files object:
 
 ```ts
 import { files } from "files-pipeline";
-import * as fs from "fs";
 
 await (
 	await (await new files().in("./input/")).by("**/*.md")
 ).pipeline({
+	// Prepend some content to all of the text files
 	wrote: async (current) => current.buffer,
-	read: async (current) =>
-		await fs.promises.readFile(current.inputPath, "utf-8"),
-	passed: async () => true,
-	failed: async (current) =>
-		`Error: Cannot process file ${current.inputPath}!`,
-	accomplished: async (current) =>
-		`Processed ${current.inputPath} in ${current.outputPath}.`,
-	fulfilled: async (pipe) =>
-		`Successfully processed a total of ${pipe.files} ${
-			pipe.files === 1 ? "file" : "files"
-		}.`,
-	changed: async (pipe) => pipe,
 });
 ```
 
